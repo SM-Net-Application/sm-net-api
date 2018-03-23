@@ -18,7 +18,7 @@ public class FileFolder {
 	 * @param directory
 	 * @return list files and folders or null
 	 */
-	public static File[] listAllFiles(File directory) {
+	public static File[] listAllFilesAndFolders(File directory) {
 
 		if (directory != null) {
 			if (directory.exists()) {
