@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 /**
  * 
@@ -14,7 +12,7 @@ import java.time.format.DateTimeFormatter;
  * 
  *         Utility Class for Files and Folders
  */
-public class FileFolder {
+public class FilesFolders {
 
 	/**
 	 * 
@@ -79,25 +77,6 @@ public class FileFolder {
 					}
 				}
 			}
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * Returns the string for the instant's output
-	 * 
-	 * @param instant
-	 * @param format
-	 *            For example: dd.MM.yyyy HH:mm:ss
-	 * @return string or null
-	 */
-	public static String printInstant(Instant instant, String format) {
-
-		if (instant != null) {
-			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(format).withZone(ZoneId.systemDefault());
-
-			return dateTimeFormatter.format(instant);
 		}
 		return null;
 	}
