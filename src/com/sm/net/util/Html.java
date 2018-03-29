@@ -13,6 +13,16 @@ import java.net.URL;
  */
 public class Html {
 
+	/*
+	 * Metadata
+	 */
+	public static final String backslash = "\"";
+	public static final String tagSpanStart = "<span>";
+	public static final String tagSpanEnd = "</span>";
+	public static final String tagDivStart = "<div>";
+	public static final String tagDivEnd = "</div>";
+	public static final String attrSrcStart = "src=\"";
+
 	/**
 	 * 
 	 * HTML encoding of foreign language characters
@@ -66,7 +76,7 @@ public class Html {
 
 		return part;
 	}
-	
+
 	/**
 	 * 
 	 * Returns source code for a web page
