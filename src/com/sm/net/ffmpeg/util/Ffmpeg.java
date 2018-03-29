@@ -13,7 +13,7 @@ import com.sm.net.util.Strings;
  * 
  *         Utility Class for FFMPEG
  */
-public class FFMPEGUtil {
+public class Ffmpeg {
 
 	/**
 	 * Returns StringsArray for Command Line Windows - command line: ffmpeg.exe
@@ -23,13 +23,13 @@ public class FFMPEGUtil {
 	 * @param video
 	 * @return StringsArray
 	 */
-	public static String[] buildCommandLineGetMetadata(File ffmpeg, File video) {
+	public static String[] buildCommandLineWin(File ffmpeg, File video) {
 
-		String command = "\"" + ffmpeg.getAbsolutePath() + "\"";
-		String argument1 = "-i";
-		String argument2 = "\"" + video.getAbsolutePath() + "\"";
+		String ffmpegPath = "\"" + ffmpeg.getAbsolutePath() + "\"";
+		String minusI = "-i";
+		String videoPath = "\"" + video.getAbsolutePath() + "\"";
 
-		return new String[] { command, argument1, argument2 };
+		return new String[] { ffmpegPath, minusI, videoPath };
 	}
 
 	/**
