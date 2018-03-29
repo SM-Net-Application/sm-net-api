@@ -1,4 +1,4 @@
-package com.sm.net.images.util;
+package com.sm.net.images;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import com.drew.metadata.exif.ExifSubIFDDirectory;
  * 
  *         Utility Class for Image Files
  */
-public class ImagesUtil {
+public class ImagesInfo {
 
 	/**
 	 * Returns the object Metadata of a image file
