@@ -76,7 +76,7 @@ public class OperatingSystem {
 			final Process process = processBuilder.start();
 
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			String line = null;
+			String line = "";
 			while ((line = bufferedReader.readLine()) != null) {
 				output += line;
 				output += "\n";
