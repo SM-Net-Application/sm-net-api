@@ -3,6 +3,7 @@ package com.sm.net.h2;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sm.net.h2.enumeration.DataTypesDate;
 import com.sm.net.h2.enumeration.DataTypesNumber;
 
 public class TableBuilder {
@@ -24,6 +25,15 @@ public class TableBuilder {
 
 	public void addTextColumn(String columnName, Integer lenght) {
 		this.columns.add(columnName + " VARCHAR(" + lenght.intValue() + ")");
+	}
+
+	public void addDateColumn(String columnName, DataTypesDate dataTypesDate) {
+
+		String sql = columnName;
+		sql += " ";
+		sql += dataTypesDate.getName();
+
+		this.columns.add(sql);
 	}
 
 	public void addNumberColumn(String columnName, DataTypesNumber dataTypesNumber, Boolean notNull) {

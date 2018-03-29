@@ -3,6 +3,9 @@ package com.sm.net.h2;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sm.net.h2.enumeration.DataTypesDate;
+
+
 public class InsertBuilder {
 
 	private String schemaName;
@@ -26,6 +29,31 @@ public class InsertBuilder {
 	public void addTextColumn(String columnName, String value) {
 		this.columns.add(columnName);
 		this.values.add("'" + value + "'");
+	}
+
+	public void addDateColumn(String columnName, DataTypesDate dataTypesDate, String value, String stringFormat) {
+		this.columns.add(columnName);
+		switch (dataTypesDate) {
+		case TIMESTAMP:
+
+			String valueTemp = "parsedatetime";
+			valueTemp += "(";
+			valueTemp += "'";
+			valueTemp += value;
+			valueTemp += "'";
+			valueTemp += ",";
+			valueTemp += " ";
+			valueTemp += "'";
+			valueTemp += stringFormat;
+			valueTemp += "'";
+			valueTemp += ")";
+
+			this.values.add(valueTemp);
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	public String getQuery() {
