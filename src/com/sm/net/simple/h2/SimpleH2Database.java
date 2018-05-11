@@ -1,6 +1,7 @@
 package com.sm.net.simple.h2;
 
 import java.io.File;
+import java.util.List;
 
 import org.h2.jdbcx.JdbcConnectionPool;
 
@@ -15,7 +16,6 @@ public class SimpleH2Database {
 
 	public final static String urlJdbcH2 = "jdbc:h2:";
 	public final static String urlAutoServer = "AUTO_SERVER=TRUE;";
-	public final static String urlIfExists = "IFEXISTS=TRUE;";
 
 	private String message;
 
@@ -28,7 +28,6 @@ public class SimpleH2Database {
 	private String userPassword;
 
 	private boolean autoServer;
-	private boolean ifExists;
 
 	private boolean connectionPool;
 	private JdbcConnectionPool jdbcConnectionPool;
@@ -45,7 +44,6 @@ public class SimpleH2Database {
 		this.userName = "";
 		this.userPassword = "";
 		this.autoServer = false;
-		this.ifExists = false;
 		this.connectionPool = false;
 		this.jdbcConnectionPool = null;
 	}
@@ -57,6 +55,10 @@ public class SimpleH2Database {
 	 *            Where to create the file
 	 * @param databaseFileName
 	 *            Database file name
+	 * @param name
+	 *            Username
+	 * @param password
+	 *            Password
 	 */
 	public SimpleH2Database(File databaseFolder, String databaseFileName, String userName, String userPassword,
 			boolean autoServer) {
@@ -139,9 +141,6 @@ public class SimpleH2Database {
 		if (this.autoServer)
 			jdbcUrl += urlAutoServer;
 
-		if (this.ifExists)
-			jdbcUrl += urlIfExists;
-
 		return jdbcUrl;
 	}
 
@@ -182,16 +181,48 @@ public class SimpleH2Database {
 	}
 
 	/**
-	 * Execut Insert or Update Operation
+	 * Execut Insert, Delete or Update Operation
 	 * 
 	 * @param query
 	 */
 	public void runOperation(String query) {
 		if (this.connectionPool) {
-			if (!SimpleH2SQLCommands.runQuery(query, this.jdbcConnectionPool))
+			if (SimpleH2SQLCommands.runUpdateQuery(query, this.jdbcConnectionPool) == -1)
 				this.setMessage("Operation failed: " + query);
 		} else
 			this.setMessage("JDBC Connection Pool is not available");
+	}
+
+	/**
+	 * Execute a Insert Query and return the auto-generated keys
+	 * 
+	 * @param query
+	 */
+	public List<Integer> runInsert(String query) {
+		if (this.connectionPool) {
+			return SimpleH2SQLCommands.runInsertQuery(query, this.jdbcConnectionPool);
+		} else
+			this.setMessage("JDBC Connection Pool is not available");
+
+		return null;
+	}
+
+	/**
+	 * Execut Selection
+	 * 
+	 * @param query
+	 */
+	public SimpleH2ResultSet runSelection(String query) {
+		if (this.connectionPool) {
+			SimpleH2ResultSet simpleH2ResultSet = SimpleH2SQLCommands.runSelectQuery(query, this.jdbcConnectionPool);
+			if (simpleH2ResultSet != null)
+				return simpleH2ResultSet;
+			else
+				this.setMessage("Selection failed: " + query);
+		} else
+			this.setMessage("JDBC Connection Pool is not available");
+
+		return null;
 	}
 
 	public boolean isCreable() {
@@ -256,14 +287,6 @@ public class SimpleH2Database {
 
 	public void setAutoServer(boolean autoServer) {
 		this.autoServer = autoServer;
-	}
-
-	public boolean isIfExists() {
-		return ifExists;
-	}
-
-	public void setIfExists(boolean ifExists) {
-		this.ifExists = ifExists;
 	}
 
 	public JdbcConnectionPool getJdbcConnectionPool() {

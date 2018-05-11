@@ -16,6 +16,7 @@ public class OperationBuilder {
 	private List<String> editColumnsName;
 	private List<String> editColumnsValue;
 	private List<String> conditions;
+	private List<String> selections;
 
 	public OperationBuilder(String schemaName, String tableName) {
 		super();
@@ -25,6 +26,7 @@ public class OperationBuilder {
 		this.editColumnsName = new ArrayList<>();
 		this.editColumnsValue = new ArrayList<>();
 		this.conditions = new ArrayList<>();
+		this.selections = new ArrayList<>();
 	}
 
 	/**
@@ -182,6 +184,18 @@ public class OperationBuilder {
 	}
 
 	/**
+	 * Add Selection
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param columnName
+	 *            Column name
+	 */
+	public void setSelection(String tableName, String columnName) {
+		selections.add(tableName + "." + columnName);
+	}
+
+	/**
 	 * Build Insert Query
 	 * 
 	 * @return Query as String
@@ -264,6 +278,47 @@ public class OperationBuilder {
 		return query;
 	}
 
+	/**
+	 * Build Selection Query
+	 * 
+	 * @return Query as String
+	 */
+	public String buildSelection() {
+
+		String query = "SELECT";
+
+		boolean first = true;
+
+		for (String select : selections) {
+			if (first)
+				first = false;
+			else
+				query += ", ";
+
+			query += " " + select;
+		}
+
+		query += " FROM";
+		query += " " + this.schemaName + "." + this.tableName;
+
+		if (conditions.size() > 0) {
+
+			query += " WHERE";
+
+			first = true;
+			for (int i = 0; i < conditions.size(); i++) {
+				if (first)
+					first = false;
+				else
+					query += " AND ";
+
+				query += " " + conditions.get(i);
+			}
+		}
+
+		return query;
+	}
+
 	public String getSchemaName() {
 		return schemaName;
 	}
@@ -302,6 +357,14 @@ public class OperationBuilder {
 
 	public void setConditions(List<String> conditions) {
 		this.conditions = conditions;
+	}
+
+	public List<String> getSelections() {
+		return selections;
+	}
+
+	public void setSelections(List<String> selections) {
+		this.selections = selections;
 	}
 
 }

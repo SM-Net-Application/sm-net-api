@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.h2.jdbcx.JdbcDataSource;
@@ -47,9 +49,16 @@ public class SimpleH2SQLCommands {
 		}
 	}
 
+	/**
+	 * Execute Create Query
+	 * 
+	 * @param query
+	 * @param jdbcConnectionPool
+	 * @return
+	 */
 	public static boolean runQuery(String query, JdbcConnectionPool jdbcConnectionPool) {
 
-		boolean status = true;
+		boolean execute = true;
 		Connection connection = openConnection(jdbcConnectionPool);
 
 		if (connection != null) {
@@ -58,49 +67,84 @@ public class SimpleH2SQLCommands {
 				statement = connection.createStatement();
 				statement.execute(query);
 			} catch (SQLException e) {
-				status = false;
-				System.out.println(e.getMessage());
+				execute = false;
 			} finally {
 				closeStatement(statement);
 				closeConnection(connection);
 			}
 		} else
-			status = false;
+			execute = false;
 
-		return status;
+		return execute;
 	}
 
-	public static int runQueryUpdate(String query, JdbcConnectionPool cp) {
+	/**
+	 * Execute Insert, Delete or Update Query
+	 * 
+	 * @param query
+	 * @param jdbcConnectionPool
+	 * @return
+	 */
+	public static int runUpdateQuery(String query, JdbcConnectionPool jdbcConnectionPool) {
 
-		Connection connection = null;
-		connection = openConnection(cp);
-
-		int status = -1;
+		int rowCount = -1;
+		Connection connection = openConnection(jdbcConnectionPool);
 
 		if (connection != null) {
 			Statement statement = null;
 			try {
 				statement = connection.createStatement();
-				status = statement.executeUpdate(query);
+				rowCount = statement.executeUpdate(query);
 			} catch (SQLException e) {
-				if (!e.getMessage().contains("already exists")) {
-					e.printStackTrace();
-				}
 			} finally {
 				closeStatement(statement);
 				closeConnection(connection);
 			}
 		}
 
-		return status;
+		return rowCount;
 	}
 
-	public static Integer runQueryGetId(String query, JdbcConnectionPool cp) {
+	/**
+	 * Execute Select Query
+	 * 
+	 * @param query
+	 * @param jdbcConnectionPool
+	 * @return SimpleH2ResultSet Object, run the method "close" after processing
+	 *         the result
+	 */
+	public static SimpleH2ResultSet runSelectQuery(String query, JdbcConnectionPool jdbcConnectionPool) {
 
-		Integer indice = null;
+		SimpleH2ResultSet simpleH2ResultSet = null;
+		Connection connection = openConnection(jdbcConnectionPool);
 
+		if (connection != null) {
+			Statement statement = null;
+			try {
+				statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(query);
+				if (resultSet != null)
+					simpleH2ResultSet = new SimpleH2ResultSet(connection, statement, resultSet);
+
+			} catch (SQLException e) {
+			}
+		}
+
+		return simpleH2ResultSet;
+	}
+
+	/**
+	 * Execute a Insert Query and return the auto-generated keys
+	 * 
+	 * @param query
+	 * @param jdbcConnectionPool
+	 * @return
+	 */
+	public static List<Integer> runInsertQuery(String query, JdbcConnectionPool jdbcConnectionPool) {
+
+		List<Integer> indexes = new ArrayList<>();
 		Connection connection = null;
-		connection = openConnection(cp);
+		connection = openConnection(jdbcConnectionPool);
 
 		if (connection != null) {
 			PreparedStatement preparedStatement = null;
@@ -108,14 +152,12 @@ public class SimpleH2SQLCommands {
 			try {
 				preparedStatement = connection.prepareStatement(query, new String[] { "ID" });
 				preparedStatement.executeUpdate();
-
 				resultSet = preparedStatement.getGeneratedKeys();
-				while (resultSet.next()) {
-					indice = new Integer(resultSet.getInt(1));
-				}
+
+				while (resultSet.next())
+					indexes.add(new Integer(resultSet.getInt(1)));
 
 			} catch (SQLException e) {
-				e.printStackTrace();
 			} finally {
 				closeResultSet(resultSet);
 				closePreparedStatement(preparedStatement);
@@ -123,29 +165,8 @@ public class SimpleH2SQLCommands {
 			}
 		}
 
-		return indice;
+		return indexes;
 	}
-
-	// public static ResultSetH2 runQueryGetResultSet(String query,
-	// JdbcConnectionPool jcp) {
-	//
-	// Connection connection = null;
-	// Statement statement = null;
-	// ResultSet resultSet = null;
-	// ResultSetH2 resultSetH2 = null;
-	// try {
-	// connection = jcp.getConnection();
-	// if (connection != null) {
-	// statement = connection.createStatement();
-	// resultSet = statement.executeQuery(query);
-	// resultSetH2 = new ResultSetH2(connection, statement, resultSet);
-	// }
-	// } catch (SQLException e) {
-	// System.out.println(e.getMessage());
-	// }
-	//
-	// return resultSetH2;
-	// }
 
 	/**
 	 * Close connection
