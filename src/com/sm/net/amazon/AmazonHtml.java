@@ -1,4 +1,4 @@
-package com.sm.net.amazon.util;
+package com.sm.net.amazon;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * 
  *         Utility Class for Amazon HTML code
  */
-public class Html {
+public class AmazonHtml {
 
 	/*
 	 * Metadata
