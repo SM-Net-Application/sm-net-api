@@ -255,7 +255,7 @@ public class OperationBuilder {
 			if (first)
 				first = false;
 			else
-				query += ", ";
+				query += ",";
 
 			query += " " + editColumnsName.get(i) + "=" + editColumnsValue.get(i);
 		}
@@ -269,7 +269,7 @@ public class OperationBuilder {
 				if (first)
 					first = false;
 				else
-					query += " AND ";
+					query += " AND";
 
 				query += " " + conditions.get(i);
 			}
@@ -293,7 +293,7 @@ public class OperationBuilder {
 			if (first)
 				first = false;
 			else
-				query += ", ";
+				query += ",";
 
 			query += " " + select;
 		}
@@ -310,7 +310,7 @@ public class OperationBuilder {
 				if (first)
 					first = false;
 				else
-					query += " AND ";
+					query += " AND";
 
 				query += " " + conditions.get(i);
 			}
