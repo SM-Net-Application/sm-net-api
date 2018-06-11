@@ -1,15 +1,21 @@
 package com.sm.net.util;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
+import java.io.IOException;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 /**
  * 
  * @author SM-Net <http://sm-netzwerk.com>
+ * @version 1.1.0
  * 
- *         Utility Class for HTML code
+ *          Utility Class for HTML code
  */
 public class Html {
 
@@ -88,33 +94,31 @@ public class Html {
 
 		String sourceCode = "";
 
-		InputStream openStream = null;
-		InputStreamReader inputStreamReader = null;
-		BufferedReader bufferedReader = null;
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		HttpGet httpGet = new HttpGet(url);
+		CloseableHttpResponse response = null;
+
 		try {
-			URL urlResource = new URL(url);
-			openStream = urlResource.openStream();
-			inputStreamReader = new InputStreamReader(openStream);
-			bufferedReader = new BufferedReader(inputStreamReader);
 
-			String line = "";
-			while ((line = bufferedReader.readLine()) != null) {
-				sourceCode += line + "\n";
-			}
+			response = httpClient.execute(httpGet);
+			HttpEntity entity = response.getEntity();
+			if (entity != null)
+				sourceCode = EntityUtils.toString(entity);
 
-		} catch (Exception e) {
-			sourceCode = "";
+		} catch (ClientProtocolException e) {
+			System.out.println(e.getMessage());
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
 		} finally {
 			try {
-				if (openStream != null)
-					openStream.close();
-				if (inputStreamReader != null)
-					inputStreamReader.close();
-				if (bufferedReader != null)
-					bufferedReader.close();
-			} catch (Exception e) {
+				if (httpClient != null)
+					httpClient.close();
+				if (response != null)
+					response.close();
+			} catch (IOException e) {
 			}
 		}
+
 		return sourceCode;
 	}
 }
