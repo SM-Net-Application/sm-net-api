@@ -15,18 +15,18 @@ import com.sm.net.easy.h2.util.H2DataTypes;
 public class EasyH2Table {
 
 	private String tableName;
-	private EasyH2Schema simpleH2Schema;
+	private String schema;
 	private boolean ifNotExists;
 	private List<EasyH2Column> columns;
 
 	/**
 	 * Simple H2 Table Constructor
 	 */
-	public EasyH2Table(String tableName, EasyH2Schema simpleH2Schema) {
+	public EasyH2Table(String tableName, String schema) {
 		super();
 
 		this.tableName = tableName;
-		this.simpleH2Schema = simpleH2Schema;
+		this.schema = schema;
 		this.ifNotExists = false;
 		columns = new ArrayList<>();
 	}
@@ -34,10 +34,10 @@ public class EasyH2Table {
 	/**
 	 * Simple H2 Table IF NOT EXISTS Constructor
 	 */
-	public EasyH2Table(String tableName, EasyH2Schema simpleH2Schema, boolean ifNotExists) {
+	public EasyH2Table(String tableName, String schema, boolean ifNotExists) {
 		super();
 		this.tableName = tableName;
-		this.simpleH2Schema = simpleH2Schema;
+		this.schema = schema;
 		this.ifNotExists = ifNotExists;
 		columns = new ArrayList<>();
 	}
@@ -54,7 +54,7 @@ public class EasyH2Table {
 		if (this.ifNotExists)
 			query += " IF NOT EXISTS";
 
-		query += " " + this.simpleH2Schema.getSchemaName() + "." + this.tableName;
+		query += " " + this.schema + "." + this.tableName;
 
 		query += "(";
 
@@ -74,7 +74,7 @@ public class EasyH2Table {
 			H2DataTypes h2DataType = column.getH2DataType();
 			query += h2DataType.getName();
 
-			if (h2DataType.compareTo(H2DataTypes.VARCHAR) == 0)
+			if (h2DataType == H2DataTypes.VARCHAR)
 				query += "(" + column.getCharLenght().intValue() + ")";
 
 			// Primary Key
@@ -103,12 +103,12 @@ public class EasyH2Table {
 		this.tableName = tableName;
 	}
 
-	public EasyH2Schema getSimpleH2Schema() {
-		return simpleH2Schema;
+	public String getSchema() {
+		return schema;
 	}
 
-	public void setSimpleH2Schema(EasyH2Schema simpleH2Schema) {
-		this.simpleH2Schema = simpleH2Schema;
+	public void setSchema(String schema) {
+		this.schema = schema;
 	}
 
 	public List<EasyH2Column> getColumns() {
