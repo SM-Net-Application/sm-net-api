@@ -1,4 +1,4 @@
-package com.sm.net.easy.h2;
+package com.sm.net.easy.h2.util;
 
 public class EasyH2Orders {
 

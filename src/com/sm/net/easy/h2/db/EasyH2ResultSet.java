@@ -1,8 +1,10 @@
-package com.sm.net.easy.h2;
+package com.sm.net.easy.h2.db;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+
+import com.sm.net.easy.h2.execute.EasyH2Commands;
 
 public class EasyH2ResultSet {
 

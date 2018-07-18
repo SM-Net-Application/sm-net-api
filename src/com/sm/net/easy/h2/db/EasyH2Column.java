@@ -1,4 +1,6 @@
-package com.sm.net.easy.h2;
+package com.sm.net.easy.h2.db;
+
+import com.sm.net.easy.h2.util.H2DataTypes;
 
 /**
  * 

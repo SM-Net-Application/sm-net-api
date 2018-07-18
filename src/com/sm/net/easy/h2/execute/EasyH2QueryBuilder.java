@@ -1,4 +1,4 @@
-package com.sm.net.easy.h2;
+package com.sm.net.easy.h2.execute;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class OperationBuilder {
+import com.sm.net.easy.h2.util.EasyH2Util;
+
+public class EasyH2QueryBuilder {
 
 	private String fromSchema;
 	private String fromTable;
@@ -19,7 +21,7 @@ public class OperationBuilder {
 	private List<String> select;
 	private List<String> order;
 
-	public OperationBuilder(String schema, String table) {
+	public EasyH2QueryBuilder(String schema, String table) {
 		super();
 		this.fromSchema = schema;
 		this.fromTable = table;

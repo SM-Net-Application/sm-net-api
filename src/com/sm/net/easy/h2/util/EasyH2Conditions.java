@@ -1,4 +1,4 @@
-package com.sm.net.easy.h2;
+package com.sm.net.easy.h2.util;
 
 import java.math.BigDecimal;
 import java.time.Instant;
