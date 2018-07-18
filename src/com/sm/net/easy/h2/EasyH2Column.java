@@ -1,4 +1,4 @@
-package com.sm.net.simple.h2;
+package com.sm.net.easy.h2;
 
 /**
  * 
@@ -7,7 +7,7 @@ package com.sm.net.simple.h2;
  *         Simple H2 Column
  *
  */
-public class SimpleH2Column {
+public class EasyH2Column {
 
 	private String columnName;
 	private H2DataTypes h2DataType;
@@ -24,7 +24,7 @@ public class SimpleH2Column {
 	 * @param h2DataType
 	 *            Column type
 	 */
-	public SimpleH2Column(String columnName, H2DataTypes h2DataType) {
+	public EasyH2Column(String columnName, H2DataTypes h2DataType) {
 		super();
 		this.columnName = columnName;
 		this.h2DataType = h2DataType;
@@ -45,7 +45,7 @@ public class SimpleH2Column {
 	 * @param charLenght
 	 *            VARCHAR Lenght
 	 */
-	public SimpleH2Column(String columnName, H2DataTypes h2DataType, int charLenght) {
+	public EasyH2Column(String columnName, H2DataTypes h2DataType, int charLenght) {
 		super();
 		this.columnName = columnName;
 		this.h2DataType = h2DataType;
@@ -68,7 +68,7 @@ public class SimpleH2Column {
 	 * @param autoIncrement
 	 *            If true: AUTO_INCREMENT
 	 */
-	public SimpleH2Column(String columnName, H2DataTypes h2DataType, boolean primaryKey, boolean autoIncrement) {
+	public EasyH2Column(String columnName, H2DataTypes h2DataType, boolean primaryKey, boolean autoIncrement) {
 		super();
 		this.columnName = columnName;
 		this.h2DataType = h2DataType;
@@ -89,7 +89,7 @@ public class SimpleH2Column {
 	 * @param notNull
 	 *            If true: NOT NULL
 	 */
-	public SimpleH2Column(String columnName, H2DataTypes h2DataType, boolean notNull) {
+	public EasyH2Column(String columnName, H2DataTypes h2DataType, boolean notNull) {
 		super();
 		this.columnName = columnName;
 		this.h2DataType = h2DataType;
@@ -112,7 +112,7 @@ public class SimpleH2Column {
 	 * @param charLenght
 	 *            VARCHAR Lenght
 	 */
-	public SimpleH2Column(String columnName, H2DataTypes h2DataType, boolean notNull, int charLenght) {
+	public EasyH2Column(String columnName, H2DataTypes h2DataType, boolean notNull, int charLenght) {
 		super();
 		this.columnName = columnName;
 		this.h2DataType = h2DataType;

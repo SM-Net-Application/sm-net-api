@@ -1,4 +1,4 @@
-package com.sm.net.simple.h2;
+package com.sm.net.easy.h2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,17 +10,17 @@ import java.util.List;
  *         Simple H2 Table
  *
  */
-public class SimpleH2Table {
+public class EasyH2Table {
 
 	private String tableName;
-	private SimpleH2Schema simpleH2Schema;
+	private EasyH2Schema simpleH2Schema;
 	private boolean ifNotExists;
-	private List<SimpleH2Column> columns;
+	private List<EasyH2Column> columns;
 
 	/**
 	 * Simple H2 Table Constructor
 	 */
-	public SimpleH2Table(String tableName, SimpleH2Schema simpleH2Schema) {
+	public EasyH2Table(String tableName, EasyH2Schema simpleH2Schema) {
 		super();
 
 		this.tableName = tableName;
@@ -32,7 +32,7 @@ public class SimpleH2Table {
 	/**
 	 * Simple H2 Table IF NOT EXISTS Constructor
 	 */
-	public SimpleH2Table(String tableName, SimpleH2Schema simpleH2Schema, boolean ifNotExists) {
+	public EasyH2Table(String tableName, EasyH2Schema simpleH2Schema, boolean ifNotExists) {
 		super();
 		this.tableName = tableName;
 		this.simpleH2Schema = simpleH2Schema;
@@ -40,8 +40,8 @@ public class SimpleH2Table {
 		columns = new ArrayList<>();
 	}
 
-	public void addColumn(SimpleH2Column... columns) {
-		for (SimpleH2Column column : columns)
+	public void addColumn(EasyH2Column... columns) {
+		for (EasyH2Column column : columns)
 			this.columns.add(column);
 	}
 
@@ -57,7 +57,7 @@ public class SimpleH2Table {
 		query += "(";
 
 		boolean first = true;
-		for (SimpleH2Column column : columns) {
+		for (EasyH2Column column : columns) {
 
 			// Separator
 			if (first)
@@ -101,19 +101,19 @@ public class SimpleH2Table {
 		this.tableName = tableName;
 	}
 
-	public SimpleH2Schema getSimpleH2Schema() {
+	public EasyH2Schema getSimpleH2Schema() {
 		return simpleH2Schema;
 	}
 
-	public void setSimpleH2Schema(SimpleH2Schema simpleH2Schema) {
+	public void setSimpleH2Schema(EasyH2Schema simpleH2Schema) {
 		this.simpleH2Schema = simpleH2Schema;
 	}
 
-	public List<SimpleH2Column> getColumns() {
+	public List<EasyH2Column> getColumns() {
 		return columns;
 	}
 
-	public void setColumns(List<SimpleH2Column> columns) {
+	public void setColumns(List<EasyH2Column> columns) {
 		this.columns = columns;
 	}
 

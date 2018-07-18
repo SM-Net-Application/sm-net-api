@@ -1,4 +1,4 @@
-package com.sm.net.simple.h2;
+package com.sm.net.easy.h2;
 
 /**
  * 
@@ -7,7 +7,7 @@ package com.sm.net.simple.h2;
  *         Simple H2 Schema
  *
  */
-public class SimpleH2Schema {
+public class EasyH2Schema {
 
 	private String schemaName;
 	private boolean ifNotExists;
@@ -20,7 +20,7 @@ public class SimpleH2Schema {
 	 * @param ifNotExists
 	 *            If true: create schema only if not exists
 	 */
-	public SimpleH2Schema(String schemaName, boolean ifNotExists) {
+	public EasyH2Schema(String schemaName, boolean ifNotExists) {
 		super();
 
 		this.schemaName = schemaName;

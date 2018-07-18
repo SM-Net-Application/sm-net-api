@@ -1,4 +1,4 @@
-package com.sm.net.simple.h2;
+package com.sm.net.easy.h2;
 
 import java.io.File;
 import java.util.List;
@@ -12,7 +12,7 @@ import org.h2.jdbcx.JdbcConnectionPool;
  *         Simple H2 Database
  *
  */
-public class SimpleH2Database {
+public class EasyH2Database {
 
 	public final static String urlJdbcH2 = "jdbc:h2:";
 	public final static String urlAutoServer = "AUTO_SERVER=TRUE;";
@@ -60,7 +60,7 @@ public class SimpleH2Database {
 	 * @param password
 	 *            Password
 	 */
-	public SimpleH2Database(File databaseFolder, String databaseFileName, String userName, String userPassword,
+	public EasyH2Database(File databaseFolder, String databaseFileName, String userName, String userPassword,
 			boolean autoServer) {
 		super();
 
@@ -112,7 +112,7 @@ public class SimpleH2Database {
 	public void createConnectionPool() {
 		if (this.login) {
 
-			this.jdbcConnectionPool = SimpleH2SQLCommands.createJdbcConnectionPool(buildJdbcUrl(), this.userName,
+			this.jdbcConnectionPool = EasyH2Commands.createJdbcConnectionPool(buildJdbcUrl(), this.userName,
 					this.userPassword);
 
 			if (this.jdbcConnectionPool != null)
@@ -158,10 +158,10 @@ public class SimpleH2Database {
 	 * @param schema
 	 *            Simple H2 Schema Object
 	 */
-	public void createSchema(SimpleH2Schema schema) {
+	public void createSchema(EasyH2Schema schema) {
 
 		if (this.connectionPool) {
-			if (!SimpleH2SQLCommands.runQuery(schema.buildQuery(), this.jdbcConnectionPool))
+			if (!EasyH2Commands.executeQuery(schema.buildQuery(), this.jdbcConnectionPool))
 				this.setMessage("Query CREATE SCHEMA " + schema.getSchemaName() + " failed");
 		} else
 			this.setMessage("JDBC Connection Pool is not available");
@@ -172,9 +172,9 @@ public class SimpleH2Database {
 	 * 
 	 * @param table
 	 */
-	public void createTable(SimpleH2Table table) {
+	public void createTable(EasyH2Table table) {
 		if (this.connectionPool) {
-			if (!SimpleH2SQLCommands.runQuery(table.buildQuery(), this.jdbcConnectionPool))
+			if (!EasyH2Commands.executeQuery(table.buildQuery(), this.jdbcConnectionPool))
 				this.setMessage("Query CREATE TABLE " + table.getTableName() + " failed");
 		} else
 			this.setMessage("JDBC Connection Pool is not available");
@@ -187,7 +187,7 @@ public class SimpleH2Database {
 	 */
 	public void runOperation(String query) {
 		if (this.connectionPool) {
-			if (SimpleH2SQLCommands.runUpdateQuery(query, this.jdbcConnectionPool) == -1)
+			if (EasyH2Commands.executeUpdateQuery(query, this.jdbcConnectionPool) == -1)
 				this.setMessage("Operation failed: " + query);
 		} else
 			this.setMessage("JDBC Connection Pool is not available");
@@ -200,7 +200,7 @@ public class SimpleH2Database {
 	 */
 	public List<Integer> runInsert(String query) {
 		if (this.connectionPool) {
-			return SimpleH2SQLCommands.runInsertQuery(query, this.jdbcConnectionPool);
+			return EasyH2Commands.executeInsertQuery(query, this.jdbcConnectionPool);
 		} else
 			this.setMessage("JDBC Connection Pool is not available");
 
@@ -212,9 +212,9 @@ public class SimpleH2Database {
 	 * 
 	 * @param query
 	 */
-	public SimpleH2ResultSet runSelection(String query) {
+	public EasyH2ResultSet runSelection(String query) {
 		if (this.connectionPool) {
-			SimpleH2ResultSet simpleH2ResultSet = SimpleH2SQLCommands.runSelectQuery(query, this.jdbcConnectionPool);
+			EasyH2ResultSet simpleH2ResultSet = EasyH2Commands.executeSelectionQuery(query, this.jdbcConnectionPool);
 			if (simpleH2ResultSet != null)
 				return simpleH2ResultSet;
 			else

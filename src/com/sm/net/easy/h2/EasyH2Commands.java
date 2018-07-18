@@ -1,4 +1,4 @@
-package com.sm.net.simple.h2;
+package com.sm.net.easy.h2;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +11,7 @@ import java.util.List;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.h2.jdbcx.JdbcDataSource;
 
-public class SimpleH2SQLCommands {
+public class EasyH2Commands {
 
 	/**
 	 * Create JDBC Connection Pool
@@ -50,13 +50,13 @@ public class SimpleH2SQLCommands {
 	}
 
 	/**
-	 * Execute Create Query
+	 * Execute Query
 	 * 
 	 * @param query
 	 * @param jdbcConnectionPool
 	 * @return
 	 */
-	public static boolean runQuery(String query, JdbcConnectionPool jdbcConnectionPool) {
+	public static boolean executeQuery(String query, JdbcConnectionPool jdbcConnectionPool) {
 
 		boolean execute = true;
 		Connection connection = openConnection(jdbcConnectionPool);
@@ -79,13 +79,13 @@ public class SimpleH2SQLCommands {
 	}
 
 	/**
-	 * Execute Insert, Delete or Update Query
+	 * Execute Insert, Delete or Update Query and return number of rows changed
 	 * 
 	 * @param query
 	 * @param jdbcConnectionPool
 	 * @return
 	 */
-	public static int runUpdateQuery(String query, JdbcConnectionPool jdbcConnectionPool) {
+	public static int executeUpdateQuery(String query, JdbcConnectionPool jdbcConnectionPool) {
 
 		int rowCount = -1;
 		Connection connection = openConnection(jdbcConnectionPool);
@@ -113,9 +113,9 @@ public class SimpleH2SQLCommands {
 	 * @return SimpleH2ResultSet Object, run the method "close" after processing
 	 *         the result
 	 */
-	public static SimpleH2ResultSet runSelectQuery(String query, JdbcConnectionPool jdbcConnectionPool) {
+	public static EasyH2ResultSet executeSelectionQuery(String query, JdbcConnectionPool jdbcConnectionPool) {
 
-		SimpleH2ResultSet simpleH2ResultSet = null;
+		EasyH2ResultSet simpleH2ResultSet = null;
 		Connection connection = openConnection(jdbcConnectionPool);
 
 		if (connection != null) {
@@ -124,7 +124,7 @@ public class SimpleH2SQLCommands {
 				statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery(query);
 				if (resultSet != null)
-					simpleH2ResultSet = new SimpleH2ResultSet(connection, statement, resultSet);
+					simpleH2ResultSet = new EasyH2ResultSet(connection, statement, resultSet);
 
 			} catch (SQLException e) {
 			}
@@ -140,7 +140,7 @@ public class SimpleH2SQLCommands {
 	 * @param jdbcConnectionPool
 	 * @return
 	 */
-	public static List<Integer> runInsertQuery(String query, JdbcConnectionPool jdbcConnectionPool) {
+	public static List<Integer> executeInsertQuery(String query, JdbcConnectionPool jdbcConnectionPool) {
 
 		List<Integer> indexes = new ArrayList<>();
 		Connection connection = null;

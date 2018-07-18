@@ -1,4 +1,4 @@
-package com.sm.net.simple.h2;
+package com.sm.net.easy.h2;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -11,188 +11,170 @@ import java.util.List;
 
 public class OperationBuilder {
 
-	private String schemaName;
-	private String tableName;
-	private List<String> editColumnsName;
-	private List<String> editColumnsValue;
-	private List<String> conditions;
-	private List<String> selections;
+	private String fromSchema;
+	private String fromTable;
+	private List<String> updateName;
+	private List<String> updateValue;
+	private List<String> where;
+	private List<String> select;
+	private List<String> order;
 
-	public OperationBuilder(String schemaName, String tableName) {
+	public OperationBuilder(String schema, String table) {
 		super();
-		this.schemaName = schemaName;
-		this.tableName = tableName;
+		this.fromSchema = schema;
+		this.fromTable = table;
 
-		this.editColumnsName = new ArrayList<>();
-		this.editColumnsValue = new ArrayList<>();
-		this.conditions = new ArrayList<>();
-		this.selections = new ArrayList<>();
+		this.updateName = new ArrayList<>();
+		this.updateValue = new ArrayList<>();
+		this.where = new ArrayList<>();
+		this.select = new ArrayList<>();
+		this.order = new ArrayList<>();
 	}
 
 	/**
-	 * Add INT Column
+	 * Update/Insert INT Column
 	 * 
 	 * @param columnName
 	 *            Column name
 	 * @param value
 	 *            Integer value
 	 */
-	public void setColumnValue(String columnName, Integer value) {
-		addColumnValue(columnName, value.toString(), false);
+	public void addUpdate(String columnName, Integer value) {
+		if (value != null)
+			addUpdateValue(columnName, value.toString(), false);
 	}
 
 	/**
-	 * Add INT Conditions - Equals
-	 * 
-	 * @param columnName
-	 *            Column name
-	 * @param value
-	 *            Integer value
-	 */
-	public void setConditionEquals(String columnName, Integer value) {
-		addConditionValue(H2Conditions.EQUALS, columnName, value.toString(), null, false);
-	}
-
-	/**
-	 * Add BOOLEAN Column
+	 * Update/Insert BOOLEAN Column
 	 * 
 	 * @param columnName
 	 *            Column name
 	 * @param value
 	 *            Boolean value
 	 */
-	public void setColumnValue(String columnName, Boolean value) {
-		addColumnValue(columnName, value.toString(), false);
+	public void addUpdate(String columnName, Boolean value) {
+		if (value != null)
+			addUpdateValue(columnName, value.toString(), false);
 	}
 
 	/**
-	 * Add DECIMAL Column
+	 * Update/Insert DECIMAL Column
 	 * 
 	 * @param columnName
 	 *            Column name
 	 * @param value
 	 *            BigDecimal value
 	 */
-	public void setColumnValue(String columnName, BigDecimal value) {
-		addColumnValue(columnName, value.setScale(2).toString(), false);
+	public void addUpdate(String columnName, BigDecimal value) {
+		if (value != null)
+			addUpdateValue(columnName, value.setScale(2).toString(), false);
 	}
 
 	/**
-	 * Add DATE Column
+	 * Update/Insert DATE Column
 	 * 
 	 * @param columnName
 	 *            Column name
 	 * @param value
 	 *            Date value
 	 */
-	public void setColumnValue(String columnName, Date value) {
-
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.systemDefault());
-		addColumnValue(columnName, dtf.format(value.toInstant()), true);
+	public void addUpdate(String columnName, Date value) {
+		if (value != null) {
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.systemDefault());
+			addUpdateValue(columnName, dtf.format(value.toInstant()), true);
+		}
 	}
 
 	/**
-	 * Add DATE Column
+	 * Update/Insert DATE Column
 	 * 
 	 * @param columnName
 	 *            Column name
 	 * @param value
 	 *            LocalDate value
 	 */
-	public void setColumnValue(String columnName, LocalDate value) {
-
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.systemDefault());
-		addColumnValue(columnName, dtf.format(value), true);
+	public void addUpdate(String columnName, LocalDate value) {
+		if (value != null) {
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.systemDefault());
+			addUpdateValue(columnName, dtf.format(value), true);
+		}
 	}
 
 	/**
-	 * Add DATE Column
+	 * Update/Insert DATE Column
 	 * 
 	 * @param columnName
 	 *            Column name
 	 * @param value
 	 *            Instant value
 	 */
-	public void setColumnValue(String columnName, Instant value) {
-
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.systemDefault());
-		addColumnValue(columnName, dtf.format(value), true);
-	}
-
-	/**
-	 * Add VARCHAR Column
-	 * 
-	 * @param columnName
-	 *            Column name
-	 * @param value
-	 *            String value
-	 */
-	public void setColumnValue(String columnName, String value) {
-		addColumnValue(columnName, value, true);
-	}
-
-	/**
-	 * Add Column in Arrays editColumns
-	 * 
-	 * @param columnName
-	 *            Column name
-	 * @param value
-	 *            String value
-	 * @param apostrophe
-	 *            If true: add apostrophe
-	 */
-	private void addColumnValue(String columnName, String value, boolean apostrophe) {
-		editColumnsName.add(columnName);
-		editColumnsValue.add(setApostrophe(apostrophe, value));
-	}
-
-	/**
-	 * Add Column in Arrays conditionColumns
-	 * 
-	 * @param condition
-	 *            Condition
-	 * @param columnName
-	 *            Column name
-	 * @param value
-	 *            String value
-	 * @param apostrophe
-	 *            If true: add apostrophe
-	 */
-	private void addConditionValue(H2Conditions condition, String columnName, String value1, String value2,
-			boolean apostrophe) {
-
-		switch (condition) {
-		case EQUALS:
-			this.conditions.add(columnName + "=" + setApostrophe(apostrophe, value1));
-			break;
-		default:
-			break;
+	public void addUpdate(String columnName, Instant value) {
+		if (value != null) {
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.systemDefault());
+			addUpdateValue(columnName, dtf.format(value), true);
 		}
 	}
 
 	/**
-	 * Set Apostrophe
+	 * Update/Insert VARCHAR Column
 	 * 
-	 * @param apostrophe
+	 * @param columnName
+	 *            Column name
 	 * @param value
-	 * @return
+	 *            String value
 	 */
-	private String setApostrophe(boolean apostrophe, String value) {
-		if (apostrophe)
-			return "'" + value + "'";
-		return value;
+	public void addUpdate(String columnName, String value) {
+		if (value != null)
+			addUpdateValue(columnName, value, true);
+	}
+
+	/**
+	 * Add Column in Arrays "update"
+	 * 
+	 * @param column
+	 *            Column name
+	 * @param value
+	 *            String value
+	 * @param apostrophe
+	 *            If true: add apostrophe
+	 */
+	private void addUpdateValue(String column, String value, boolean apostrophe) {
+		updateName.add(column);
+		updateValue.add(EasyH2Util.setApostrophe(apostrophe, value));
+	}
+
+	/**
+	 * Add Condition
+	 * 
+	 * @param condition
+	 *            Use the class: EasyH2Conditions
+	 */
+	public void addCondition(String condition) {
+		if (!condition.trim().isEmpty())
+			this.where.add(condition);
+	}
+
+	/**
+	 * Add Order
+	 * 
+	 * @param order
+	 *            Use the class: EasyH2Orders
+	 */
+	public void addOrder(String order) {
+		if (!order.trim().isEmpty())
+			this.order.add(order);
 	}
 
 	/**
 	 * Add Selection
 	 * 
-	 * @param tableName
+	 * @param table
 	 *            Table name
-	 * @param columnName
+	 * @param column
 	 *            Column name
 	 */
-	public void setSelection(String tableName, String columnName) {
-		selections.add(tableName + "." + columnName);
+	public void addSelection(String table, String column) {
+		select.add(table + "." + column);
 	}
 
 	/**
@@ -200,41 +182,17 @@ public class OperationBuilder {
 	 * 
 	 * @return Query as String
 	 */
-	public String buildInsert() {
+	public String buildInsertQuery() {
 
-		String query = "INSERT INTO";
-		query += " " + this.schemaName + "." + this.tableName;
-
+		String query = "INSERT INTO ";
+		query += getTable();
 		query += " (";
-
-		boolean first = true;
-		for (String editColumn : editColumnsName) {
-
-			if (first)
-				first = false;
-			else
-				query += ", ";
-
-			query += editColumn;
-		}
-
+		query += getColumns();
 		query += ") VALUES (";
-
-		first = true;
-		for (String editColumn : editColumnsValue) {
-
-			if (first)
-				first = false;
-			else
-				query += ", ";
-
-			query += editColumn;
-		}
-
+		query += getValues();
 		query += ")";
 
 		return query;
-
 	}
 
 	/**
@@ -242,38 +200,13 @@ public class OperationBuilder {
 	 * 
 	 * @return Query as String
 	 */
-	public String buildUpdate() {
+	public String buildUpdateQuery() {
 
-		String query = "UPDATE";
-		query += " " + this.schemaName + "." + this.tableName;
-
+		String query = "UPDATE ";
+		query += getTable();
 		query += " SET";
-
-		boolean first = true;
-
-		for (int i = 0; i < editColumnsName.size(); i++) {
-			if (first)
-				first = false;
-			else
-				query += ",";
-
-			query += " " + editColumnsName.get(i) + "=" + editColumnsValue.get(i);
-		}
-
-		if (conditions.size() > 0) {
-
-			query += " WHERE";
-
-			first = true;
-			for (int i = 0; i < conditions.size(); i++) {
-				if (first)
-					first = false;
-				else
-					query += " AND";
-
-				query += " " + conditions.get(i);
-			}
-		}
+		query += getUpdates();
+		query += getConditions();
 
 		return query;
 	}
@@ -285,86 +218,156 @@ public class OperationBuilder {
 	 */
 	public String buildSelection() {
 
-		String query = "SELECT";
-
-		boolean first = true;
-
-		for (String select : selections) {
-			if (first)
-				first = false;
-			else
-				query += ",";
-
-			query += " " + select;
-		}
-
-		query += " FROM";
-		query += " " + this.schemaName + "." + this.tableName;
-
-		if (conditions.size() > 0) {
-
-			query += " WHERE";
-
-			first = true;
-			for (int i = 0; i < conditions.size(); i++) {
-				if (first)
-					first = false;
-				else
-					query += " AND";
-
-				query += " " + conditions.get(i);
-			}
-		}
+		String query = "SELECT ";
+		query += getSelections();
+		query += " FROM ";
+		query += getTable();
+		query += getConditions();
+		query += getOrders();
 
 		return query;
 	}
 
-	public String getSchemaName() {
-		return schemaName;
+	/**
+	 * Return SchemaName.TableName
+	 * 
+	 * @return
+	 */
+	private String getTable() {
+		return this.fromSchema + "." + this.fromTable;
 	}
 
-	public void setSchemaName(String schemaName) {
-		this.schemaName = schemaName;
+	/**
+	 * Return String: column1, column2, column3 ...
+	 * 
+	 * @return
+	 */
+	private String getColumns() {
+
+		String columns = "";
+		boolean first = true;
+
+		for (String columnName : updateName) {
+			if (first)
+				first = false;
+			else
+				columns += ", ";
+
+			columns += columnName;
+		}
+		return columns;
 	}
 
-	public String getTableName() {
-		return tableName;
+	/**
+	 * Return String: value1, value2, value3 ...
+	 * 
+	 * @return
+	 */
+	private String getValues() {
+
+		String values = "";
+		boolean first = true;
+
+		for (String columnValue : updateValue) {
+			if (first)
+				first = false;
+			else
+				values += ", ";
+
+			values += columnValue;
+		}
+		return values;
 	}
 
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
+	/**
+	 * Return String: column1=value1, column1=value2, column3=value3 ...
+	 * 
+	 * @return
+	 */
+	private String getUpdates() {
+
+		String updates = "";
+		boolean first = true;
+
+		for (int i = 0; i < updateName.size(); i++) {
+			if (first)
+				first = false;
+			else
+				updates += ",";
+
+			updates += " " + updateName.get(i) + "=" + updateValue.get(i);
+		}
+		return updates;
 	}
 
-	public List<String> getEditColumnsName() {
-		return editColumnsName;
-	}
+	/**
+	 * Return WHERE Statement
+	 * 
+	 * @return
+	 */
+	private String getConditions() {
 
-	public void setEditColumnsName(List<String> editColumnsName) {
-		this.editColumnsName = editColumnsName;
-	}
+		String conditions = "";
+		boolean first = true;
 
-	public List<String> getEditColumnsValue() {
-		return editColumnsValue;
-	}
+		if (where.size() > 0) {
 
-	public void setEditColumnsValue(List<String> editColumnsValue) {
-		this.editColumnsValue = editColumnsValue;
-	}
+			conditions += " WHERE";
+			for (int i = 0; i < where.size(); i++) {
+				if (first)
+					first = false;
+				else
+					conditions += " AND";
 
-	public List<String> getConditions() {
+				conditions += " " + where.get(i);
+			}
+		}
 		return conditions;
 	}
 
-	public void setConditions(List<String> conditions) {
-		this.conditions = conditions;
-	}
+	/**
+	 * Return String: table.column1, table.column2, table.column3 ...
+	 * 
+	 * @return
+	 */
+	private String getSelections() {
 
-	public List<String> getSelections() {
+		String selections = "";
+		boolean first = true;
+
+		for (String sel : select) {
+			if (first)
+				first = false;
+			else
+				selections += ",";
+
+			selections += " " + sel;
+		}
 		return selections;
 	}
 
-	public void setSelections(List<String> selections) {
-		this.selections = selections;
-	}
+	/**
+	 * Return ORDER BY Statement
+	 * 
+	 * @return
+	 */
+	private String getOrders() {
 
+		String orders = "";
+		boolean first = true;
+
+		if (order.size() > 0) {
+
+			orders += " ORDER BY";
+			for (int i = 0; i < order.size(); i++) {
+				if (first)
+					first = false;
+				else
+					orders += " AND";
+
+				orders += " " + order.get(i);
+			}
+		}
+		return orders;
+	}
 }
