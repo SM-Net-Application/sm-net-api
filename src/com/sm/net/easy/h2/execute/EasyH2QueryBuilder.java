@@ -235,10 +235,10 @@ public class EasyH2QueryBuilder {
 	 * 
 	 * @return Query as String
 	 */
-	public String buildTruncateTable(String schema, String table) {
+	public String buildTruncateTable() {
 
 		String query = "TRUNCATE TABLE ";
-		query += schema + "." + table;
+		query += fromSchema + "." + fromTable;
 
 		return query;
 	}
@@ -248,10 +248,10 @@ public class EasyH2QueryBuilder {
 	 * 
 	 * @return Query as String
 	 */
-	public String buildDropTable(String schema, String table) {
+	public String buildDropTable() {
 
 		String query = "DROP TABLE ";
-		query += schema + "." + table;
+		query += fromSchema + "." + fromTable;
 
 		return query;
 	}
