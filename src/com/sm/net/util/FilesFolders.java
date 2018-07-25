@@ -1,5 +1,6 @@
 package com.sm.net.util;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,6 +14,47 @@ import java.time.Instant;
  *         Utility Class for Files and Folders
  */
 public class FilesFolders {
+
+	/**
+	 * Make the directory and returns it as File-Object
+	 * 
+	 * @param absolutePath
+	 * @return
+	 */
+	public static File createDirectory(String absolutePath) {
+
+		File folderFile = new File(absolutePath);
+		folderFile.mkdirs();
+
+		return folderFile;
+	}
+
+	/**
+	 * Generates the absolute path of the parent folder plus the child folder
+	 * 
+	 * @param parent
+	 * @param child
+	 * @return
+	 */
+	public static String addSubfolder(String parent, String child) {
+		return parent + File.separatorChar + child;
+	}
+
+	/**
+	 * Open the directory in the Explorer
+	 * 
+	 * @param directory
+	 */
+	public static void openDirectory(File directory) {
+
+		if (directory.exists()) {
+			Desktop desktop = Desktop.getDesktop();
+			try {
+				desktop.open(directory);
+			} catch (IOException e) {
+			}
+		}
+	}
 
 	/**
 	 * 
