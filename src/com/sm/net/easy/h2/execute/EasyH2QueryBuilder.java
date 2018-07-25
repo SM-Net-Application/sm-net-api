@@ -231,6 +231,32 @@ public class EasyH2QueryBuilder {
 	}
 
 	/**
+	 * Build Truncate Table Query
+	 * 
+	 * @return Query as String
+	 */
+	public String buildTruncateTable(String schema, String table) {
+
+		String query = "TRUNCATE TABLE ";
+		query += schema + "." + table;
+
+		return query;
+	}
+
+	/**
+	 * Build Drop Table Query
+	 * 
+	 * @return Query as String
+	 */
+	public String buildDropTable(String schema, String table) {
+
+		String query = "DROP TABLE ";
+		query += schema + "." + table;
+
+		return query;
+	}
+
+	/**
 	 * Return SchemaName.TableName
 	 * 
 	 * @return
