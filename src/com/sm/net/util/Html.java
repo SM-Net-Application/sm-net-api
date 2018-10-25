@@ -29,6 +29,8 @@ public class Html {
 	public static final String tagDivEnd = "</div>";
 	public static final String attrSrcStart = "src=\"";
 
+	private static final String noBreakSpace160 = "u00A0";
+
 	/**
 	 * 
 	 * HTML encoding of foreign language characters
@@ -68,11 +70,11 @@ public class Html {
 		String part = "";
 
 		int start = sourceCode.indexOf(startCode);
-		if (start > -1) {
+		if (start != -1) {
 
-			start = start + startCode.length();
+			start += startCode.length();
 			int end = sourceCode.indexOf(endCode, start);
-			if (end > -1) {
+			if (end != -1) {
 
 				part = sourceCode.substring(start, end);
 				part = part.replace("\n", "");
@@ -120,5 +122,53 @@ public class Html {
 		}
 
 		return sourceCode;
+	}
+
+	/**
+	 * Remove Tag from code isTagOpened = false by default
+	 * 
+	 * @param code
+	 * @return
+	 */
+	public static String removeTag(String code) {
+		return removeTag(code, false);
+	}
+
+	/**
+	 * Remove Tag from code
+	 * 
+	 * @param code
+	 * @return
+	 */
+	public static String removeTag(String code, boolean isTagOpened) {
+
+		String okChars = "";
+
+		if (!code.isEmpty()) {
+
+			char[] chars = code.toCharArray();
+
+			boolean tag = isTagOpened;
+			for (int i = 0; i < chars.length; i++) {
+				if (chars[i] == '<')
+					tag = true;
+				if (!tag)
+					okChars = okChars.isEmpty() ? String.valueOf(chars[i]) : okChars + chars[i];
+				if (chars[i] == '>')
+					tag = false;
+			}
+		}
+
+		return okChars;
+	}
+
+	/**
+	 * Convert HTML nbsp; to Space
+	 * 
+	 * @param string
+	 * @return
+	 */
+	public static String convertNoBreakSpace160(String string) {
+		return string.replaceAll("\\" + noBreakSpace160, " ");
 	}
 }
