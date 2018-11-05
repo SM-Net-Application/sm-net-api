@@ -3,8 +3,9 @@ package com.sm.net.jw.wol;
 public enum Languages {
 
 	ITALIAN(0, "Italiano", 6, "it", "i", monthsItalian(), "Settimana del %d %s", "%d-%d %s", "%d %s - %d %s",
-			"^Cantico\\s+\\d+.+"), GERMAN(0, "Deutsch", 10, "de", "x", monthsGerman(), "Woche vom %d. %s", "%d.-%d. %s",
-					"%d. %s - %d. %s", "^Lied\\s+\\d+.+");
+			"^Cantico\\s+\\d+.+", "Ripasso e panoramica del programma"), GERMAN(0, "Deutsch", 10, "de", "x",
+					monthsGerman(), "Woche vom %d. %s", "%d.-%d. %s", "%d. %s - %d. %s", "^Lied\\s+\\d+.+",
+					"Wiederholung und Vorschau");
 
 	private Integer id;
 	private String lang;
@@ -16,9 +17,11 @@ public enum Languages {
 	private String weekOfPattern2;
 	private String weekOfPattern3;
 	private String songPattern;
+	private String reviewNextWeek;
 
 	private Languages(Integer id, String lang, Integer langID, String langCode, String langShortCode, String[] months,
-			String weekOfPattern1, String weekOfPattern2, String weekOfPattern3, String songPattern) {
+			String weekOfPattern1, String weekOfPattern2, String weekOfPattern3, String songPattern,
+			String reviewNextWeek) {
 		this.id = id;
 		this.lang = lang;
 		this.langID = langID;
@@ -29,6 +32,7 @@ public enum Languages {
 		this.weekOfPattern2 = weekOfPattern2;
 		this.weekOfPattern3 = weekOfPattern3;
 		this.songPattern = songPattern;
+		this.reviewNextWeek = reviewNextWeek;
 	}
 
 	private static String[] monthsItalian() {
@@ -119,6 +123,14 @@ public enum Languages {
 
 	public void setSongPattern(String songPattern) {
 		this.songPattern = songPattern;
+	}
+
+	public String getReviewNextWeek() {
+		return reviewNextWeek;
+	}
+
+	public void setReviewNextWeek(String reviewNextWeek) {
+		this.reviewNextWeek = reviewNextWeek;
 	}
 
 }

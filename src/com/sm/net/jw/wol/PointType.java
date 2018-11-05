@@ -2,7 +2,7 @@ package com.sm.net.jw.wol;
 
 public enum PointType {
 
-	POINT(0, "Point"), VIDEO(1, "Video");
+	POINT(0, "Point"), VIDEO(1, "Video"), TEXT(2, "Text");
 
 	private Integer id;
 	private String type;

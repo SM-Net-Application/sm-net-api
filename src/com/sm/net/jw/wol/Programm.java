@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.sm.net.jw.wol.Languages;
-import com.sm.net.jw.wol.PointType;
-import com.sm.net.jw.wol.WatchtowerOnlineLibrary;
 import com.sm.net.util.DateUtil;
 import com.sm.net.util.Html;
 
@@ -28,6 +25,12 @@ public class Programm {
 	private Part openingComment;
 	private Integer indexHtmlRow;
 	private Treasures treasuresSpeaking;
+	private Treasures treasuresGems;
+	private PartWithMaterial treasuresBibleReading;
+	private ArrayList<PartWithMaterial> ministry;
+	private ArrayList<PartWithMaterial> christianLiving;
+	private Part reviewNextWeek;
+	private String watchtowerTitle;
 
 	public Programm(LocalDate date, Languages lang) {
 
@@ -45,6 +48,17 @@ public class Programm {
 		this.indexHtmlRow = Integer.valueOf(9);
 		this.treasuresSpeaking = new Treasures("", "", "", Integer.valueOf(-1));
 		this.defineTreasuresSpeaking();
+		this.treasuresGems = new Treasures("", "", "", Integer.valueOf(-1));
+		this.defineTreasuresGems();
+		this.treasuresBibleReading = new PartWithMaterial("", "", "", Integer.valueOf(-1), "");
+		this.defineTreasuresBibleReading();
+		this.ministry = new ArrayList<>();
+		this.defineMinistry();
+		this.christianLiving = new ArrayList<>();
+		this.defineChristianLiving();
+		this.reviewNextWeek = new Part("", "", "", Integer.valueOf(-1));
+		this.defineReviewNextWeek();
+		this.watchtowerTitle = lastRow();
 	}
 
 	public String getWeekOfStyle1() {
@@ -74,7 +88,7 @@ public class Programm {
 		return lang.getMonths()[date.getMonthValue() - 1];
 	}
 
-	public void sysOutRelevantRows() {
+	public void printRelevantRows() {
 		for (String s : WOLHtmlRelevantRows)
 			System.out.println(s);
 	}
@@ -138,19 +152,21 @@ public class Programm {
 		this.treasuresSpeaking.setFullMin(Html.getSubsourceCode(row8, "(", ")"));
 		this.treasuresSpeaking.setMin(getMin(this.treasuresSpeaking.getFullMin()));
 
-		defineTreasuresSpeakingPoints();
+		defineTreasuresPoints(this.treasuresSpeaking);
 	}
 
-	private void defineTreasuresSpeakingPoints() {
+	private void defineTreasuresPoints(Treasures treasures) {
 
 		String row = this.WOLHtmlRelevantRows.get(this.indexHtmlRow.intValue());
 
 		while (row.contains("class=\"sw\"")) {
 
 			if (row.contains("class=\"b\"")) {
-				addTreasuresSpeakingPoint(row);
+				addTreasuresPoint(treasures, row);
 			} else if (row.contains("class=\"fb\"")) {
-				addTreasuresSpeakingVideo(row);
+				addTreasuresVideo(treasures, row);
+			} else {
+				addTreasuresText(treasures, row);
 			}
 
 			this.indexHtmlRow = Integer.valueOf(this.indexHtmlRow.intValue() + 1);
@@ -158,12 +174,27 @@ public class Programm {
 		}
 	}
 
-	private void addTreasuresSpeakingVideo(String row) {
+	private void addTreasuresText(Treasures treasures, String row) {
 		String fullTitle = Html.removeTag(row);
-		this.treasuresSpeaking.getPoints().add(new PointTreasures(PointType.VIDEO, fullTitle, fullTitle, ""));
+		treasures.getPoints().add(new PointTreasures(PointType.TEXT, fullTitle, fullTitle, ""));
 	}
 
-	private void addTreasuresSpeakingPoint(String row) {
+	private void defineTreasuresGems() {
+
+		String htmlRow = this.WOLHtmlRelevantRows.get(this.indexHtmlRow.intValue());
+		String row = Html.removeTag(htmlRow).trim();
+
+		this.treasuresGems.setFullTitle(row);
+		this.treasuresGems.setTitle(removeTheLastTwoPoints(row.substring(0, row.indexOf("(")).trim()));
+		this.treasuresGems.setFullMin(Html.getSubsourceCode(row, "(", ")"));
+		this.treasuresGems.setMin(getMin(this.treasuresGems.getFullMin()));
+
+		this.indexHtmlRow = Integer.valueOf(this.indexHtmlRow.intValue() + 1);
+
+		defineTreasuresPoints(this.treasuresGems);
+	}
+
+	private void addTreasuresPoint(Treasures treasures, String row) {
 
 		String bible = "";
 		String fullTitle = Html.convertNoBreakSpace160(Html.removeTag(row)).trim();
@@ -187,7 +218,112 @@ public class Programm {
 		for (String s : splitMaterials)
 			material.add(s.trim());
 
-		this.treasuresSpeaking.getPoints().add(new PointTreasures(PointType.POINT, fullTitle, title, bible, material));
+		treasures.getPoints().add(new PointTreasures(PointType.POINT, fullTitle, title, bible, material));
+	}
+
+	private void addTreasuresVideo(Treasures treasures, String row) {
+		String fullTitle = Html.removeTag(row);
+		treasures.getPoints().add(new PointTreasures(PointType.VIDEO, fullTitle, fullTitle, ""));
+	}
+
+	private void defineTreasuresBibleReading() {
+
+		String htmlRow = this.WOLHtmlRelevantRows.get(this.indexHtmlRow.intValue());
+		String fullTitle = Html.removeTag(htmlRow).trim();
+		String title = removeTheLastTwoPoints(fullTitle.substring(0, fullTitle.indexOf("(")).trim());
+		String fullMin = Html.getSubsourceCode(fullTitle, "(", ")");
+		Integer min = getMin(fullMin);
+
+		String material = "";
+		String[] fullTitleSplitted = fullTitle.split("\\)");
+		if (fullTitleSplitted.length == 2)
+			material = fullTitleSplitted[1].trim();
+
+		treasuresBibleReading.setFullTitle(fullTitle);
+		treasuresBibleReading.setTitle(title);
+		treasuresBibleReading.setFullMin(fullMin);
+		treasuresBibleReading.setMin(min);
+		treasuresBibleReading.setMaterial(material);
+	}
+
+	private void defineMinistry() {
+
+		this.indexHtmlRow = Integer.valueOf(this.indexHtmlRow.intValue() + 2);
+		String row = this.WOLHtmlRelevantRows.get(this.indexHtmlRow.intValue());
+
+		while (row.contains("class=\"su\"")) {
+
+			addMinistryPart(row);
+
+			this.indexHtmlRow = Integer.valueOf(this.indexHtmlRow.intValue() + 1);
+			row = this.WOLHtmlRelevantRows.get(this.indexHtmlRow.intValue());
+		}
+	}
+
+	private void addMinistryPart(String htmlRow) {
+
+		String fullTitle = Html.removeTag(htmlRow).trim();
+		String title = removeTheLastTwoPoints(fullTitle.substring(0, fullTitle.indexOf("(")).trim());
+		String fullMin = Html.getSubsourceCode(fullTitle, "(", ")");
+		Integer min = getMin(fullMin);
+
+		String material = "";
+		String[] fullTitleSplitted = fullTitle.split("\\)");
+		if (fullTitleSplitted.length == 2)
+			material = fullTitleSplitted[1].trim();
+
+		this.ministry.add(new PartWithMaterial(fullTitle, title, fullMin, min, material));
+	}
+
+	private void defineChristianLiving() {
+
+		this.indexHtmlRow = Integer.valueOf(this.indexHtmlRow.intValue() + 2);
+		String htmlRow = this.WOLHtmlRelevantRows.get(this.indexHtmlRow.intValue());
+		String row = Html.convertNoBreakSpace160(Html.removeTag(htmlRow)).trim();
+
+		while (htmlRow.contains("class=\"su\"") && !row.contains(lang.getReviewNextWeek())) {
+
+			addChristianLivingPart(row);
+
+			this.indexHtmlRow = Integer.valueOf(this.indexHtmlRow.intValue() + 1);
+			htmlRow = this.WOLHtmlRelevantRows.get(this.indexHtmlRow.intValue());
+			row = Html.convertNoBreakSpace160(Html.removeTag(htmlRow)).trim();
+		}
+	}
+
+	private void addChristianLivingPart(String row) {
+
+		String title = removeTheLastTwoPoints(row.substring(0, row.indexOf("(")).trim());
+		String fullMin = Html.getSubsourceCode(row, "(", ")");
+		Integer min = getMin(fullMin);
+
+		String material = "";
+		String[] fullTitleSplitted = row.split("\\)");
+		if (fullTitleSplitted.length == 2)
+			material = fullTitleSplitted[1].trim();
+
+		this.christianLiving.add(new PartWithMaterial(row, title, fullMin, min, material));
+	}
+
+	private void defineReviewNextWeek() {
+
+		String htmlRow = this.WOLHtmlRelevantRows.get(this.indexHtmlRow.intValue());
+		String row = Html.removeTag(htmlRow).trim();
+
+		this.reviewNextWeek.setFullTitle(row);
+		this.reviewNextWeek.setTitle(row.substring(0, row.indexOf("(")).trim());
+		this.reviewNextWeek.setFullMin(Html.getSubsourceCode(row, "(", ")"));
+		this.reviewNextWeek.setMin(getMin(this.reviewNextWeek.getFullMin()));
+	}
+
+	private String lastRow() {
+
+		String htmlLastRow = this.WOLHtmlRelevantRows.get(this.WOLHtmlRelevantRows.size() - 1);
+		htmlLastRow = Html.removeTag(htmlLastRow).trim();
+		String pageAndTitle = Html.removeTag(htmlLastRow).trim();
+
+		int i = pageAndTitle.indexOf(" ");
+		return i > -1 ? pageAndTitle.substring(i).trim() : pageAndTitle;
 	}
 
 	private String removeTheLastTwoPoints(String s) {
@@ -288,6 +424,54 @@ public class Programm {
 
 	public void setIndexHtmlRow(Integer indexHtmlRow) {
 		this.indexHtmlRow = indexHtmlRow;
+	}
+
+	public Treasures getTreasuresGems() {
+		return treasuresGems;
+	}
+
+	public void setTreasuresGems(Treasures treasuresGems) {
+		this.treasuresGems = treasuresGems;
+	}
+
+	public PartWithMaterial getTreasuresBibleReading() {
+		return treasuresBibleReading;
+	}
+
+	public void setTreasuresBibleReading(PartWithMaterial treasuresBibleReading) {
+		this.treasuresBibleReading = treasuresBibleReading;
+	}
+
+	public ArrayList<PartWithMaterial> getMinistry() {
+		return ministry;
+	}
+
+	public void setMinistry(ArrayList<PartWithMaterial> ministry) {
+		this.ministry = ministry;
+	}
+
+	public ArrayList<PartWithMaterial> getChristianLiving() {
+		return christianLiving;
+	}
+
+	public void setChristianLiving(ArrayList<PartWithMaterial> christianLiving) {
+		this.christianLiving = christianLiving;
+	}
+
+	public Part getReviewNextWeek() {
+		return reviewNextWeek;
+	}
+
+	public void setReviewNextWeek(Part reviewNextWeek) {
+		this.reviewNextWeek = reviewNextWeek;
+	}
+
+	public String getWatchtowerTitle() {
+		return watchtowerTitle;
+	}
+
+	public void setWatchtowerTitle(String watchtowerTitle) {
+		this.watchtowerTitle = watchtowerTitle;
 	}
 
 	public class Song {
