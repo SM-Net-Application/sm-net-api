@@ -23,10 +23,32 @@ public class FilesFolders {
 	 */
 	public static File createDirectory(String absolutePath) {
 
-		File folderFile = new File(absolutePath);
-		folderFile.mkdirs();
+		File folder = new File(absolutePath);
+		if (folder != null)
+			if (!folder.exists())
+				folder.mkdirs();
 
-		return folderFile;
+		return folder;
+	}
+
+	/**
+	 * Create the File and returns it as File-Object
+	 * 
+	 * @param absolutePath
+	 * @return
+	 */
+	public static File createFile(String absolutePath) {
+
+		File file = new File(absolutePath);
+		if (file != null)
+			if (!file.exists())
+				try {
+					file.createNewFile();
+				} catch (IOException e) {
+					return null;
+				}
+
+		return file;
 	}
 
 	/**
@@ -36,7 +58,7 @@ public class FilesFolders {
 	 * @param child
 	 * @return
 	 */
-	public static String addSubfolder(String parent, String child) {
+	public static String concat(String parent, String child) {
 		return parent + File.separatorChar + child;
 	}
 

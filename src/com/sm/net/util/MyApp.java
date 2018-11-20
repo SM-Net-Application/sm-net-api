@@ -20,16 +20,6 @@ public class MyApp {
 	}
 
 	/**
-	 * Get folder from Application Path. CreateFolder is by default: false
-	 * 
-	 * @param folderName
-	 * @return
-	 */
-	public static File getMyAppFolder(String folderName) {
-		return getMyAppFolder(folderName, false);
-	}
-
-	/**
 	 * Get folder from Application Path.
 	 * 
 	 * @param folderName
@@ -49,18 +39,59 @@ public class MyApp {
 	}
 
 	/**
-	 * Get file from the indicated path
+	 * Get folder from Application Path. CreateFolder is by default: false
 	 * 
-	 * @param initPath
-	 * @param fileName
+	 * @param folderName
 	 * @return
 	 */
-	public static File getMyAppFile(File initPath, String fileName) {
+	public static File getMyAppFolder(String folderName) {
+		return getMyAppFolder(folderName, false);
+	}
 
-		String iniDirPath = initPath.getAbsolutePath();
-		iniDirPath += File.separatorChar;
-		iniDirPath += fileName;
+	/**
+	 * Get file from Application Path. Folder is by default: Empty. Create is by
+	 * default: false
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public static File getMyAppFile(String file) {
+		return getMyAppFile("", file, false);
+	}
 
-		return new File(iniDirPath);
+	/**
+	 * Get file from Application Path. Create is by default: false
+	 * 
+	 * @param folder
+	 * @param file
+	 * @return
+	 */
+	public static File getMyAppFile(String folder, String file) {
+		return getMyAppFile(folder, file, false);
+	}
+
+	/**
+	 * Get file from Application Path
+	 * 
+	 * @param folderName
+	 * @param fileName
+	 * @param create
+	 * @return
+	 */
+	public static File getMyAppFile(String folderName, String fileName, boolean create) {
+
+		String path = getMyAppPath();
+
+		if (!folderName.isEmpty()) {
+			path = FilesFolders.concat(path, folderName);
+			if (create)
+				FilesFolders.createDirectory(path);
+		}
+
+		path = FilesFolders.concat(path, fileName);
+		if (create)
+			return FilesFolders.createFile(path);
+
+		return new File(path);
 	}
 }
