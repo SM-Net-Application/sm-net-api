@@ -2,6 +2,7 @@ package com.sm.net.util;
 
 import java.io.IOException;
 
+import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -170,5 +171,15 @@ public class Html {
 	 */
 	public static String convertNoBreakSpace160(String string) {
 		return string.replaceAll("\\" + noBreakSpace160, " ");
+	}
+
+	/**
+	 * Check if the URL is valid
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public static boolean isValidUrl(String url) {
+		return UrlValidator.getInstance().isValid(url);
 	}
 }
