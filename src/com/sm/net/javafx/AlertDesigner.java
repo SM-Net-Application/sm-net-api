@@ -1,4 +1,4 @@
-package com.sm.net.fx;
+package com.sm.net.javafx;
 
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
