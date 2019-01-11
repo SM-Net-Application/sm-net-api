@@ -32,26 +32,6 @@ public class FilesFolders {
 	}
 
 	/**
-	 * Create the File and returns it as File-Object
-	 * 
-	 * @param absolutePath
-	 * @return
-	 */
-	public static File createFile(String absolutePath) {
-
-		File file = new File(absolutePath);
-		if (file != null)
-			if (!file.exists())
-				try {
-					file.createNewFile();
-				} catch (IOException e) {
-					return null;
-				}
-
-		return file;
-	}
-
-	/**
 	 * Generates the absolute path of the parent folder plus the child folder
 	 * 
 	 * @param parent

@@ -8,6 +8,10 @@ public class PathBuilder {
 		return concat(initPath, folder);
 	}
 
+	public static String concatFile(String initPath, String file) {
+		return concat(initPath, file);
+	}
+
 	public static String concatFile(String initPath, String file, String extensionWithDot) {
 		return concat(initPath, file) + extensionWithDot;
 	}

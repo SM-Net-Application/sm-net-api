@@ -43,6 +43,15 @@ public class Language {
 		return "null";
 	}
 
+	public String getStringWithNewLine(String key) {
+		if (this.isLoaded()) {
+			String string = this.properties.getProperty(key);
+			if (string != null)
+				return string.replaceAll("\\\\n", "\n");
+		}
+		return "null";
+	}
+
 	public String getLanguage() {
 		return language;
 	}

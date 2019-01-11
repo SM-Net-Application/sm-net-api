@@ -2,6 +2,8 @@ package com.sm.net.util;
 
 import java.io.File;
 
+import com.sm.net.file.FileUtils;
+
 /**
  * 
  * @author SM-Net <http://sm-netzwerk.com>
@@ -90,7 +92,7 @@ public class MyApp {
 
 		path = FilesFolders.concat(path, fileName);
 		if (create)
-			return FilesFolders.createFile(path);
+			return FileUtils.createFile(path, create);
 
 		return new File(path);
 	}
