@@ -72,4 +72,12 @@ public class Language {
 	public void setFileProperties(File fileProperties) {
 		this.fileProperties = fileProperties;
 	}
+
+	public Properties getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Properties properties) {
+		this.properties = properties;
+	}
 }

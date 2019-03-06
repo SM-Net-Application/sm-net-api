@@ -33,8 +33,11 @@ public class JSON {
 
 			response = httpClient.execute(httpPost);
 			HttpEntity entity = response.getEntity();
-			if (entity != null)
-				return EntityUtils.toString(entity);
+			if (entity != null) {
+				String entityText = EntityUtils.toString(entity);
+				// System.out.println(entityText);
+				return entityText;
+			}
 
 		} catch (ClientProtocolException e) {
 			System.out.println(e.getMessage());

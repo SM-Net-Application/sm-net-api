@@ -13,24 +13,17 @@ import org.apache.http.util.EntityUtils;
 
 /**
  * 
- * @author SM-Net <http://sm-netzwerk.com>
+ * @author SM-Net <https://sm-netzwerk.com>
  * @version 1.1.0
  * 
  *          Utility Class for HTML code
  */
-public class Html {
+public class EasyHtml {
 
 	/*
 	 * Metadata
 	 */
 	public static final String backslash = "\"";
-	public static final String tagSpanStart = "<span>";
-	public static final String tagSpanEnd = "</span>";
-	public static final String tagDivStart = "<div>";
-	public static final String tagDivEnd = "</div>";
-	public static final String attrSrcStart = "src=\"";
-
-	private static final String noBreakSpace160 = "u00A0";
 
 	/**
 	 * 
@@ -169,8 +162,8 @@ public class Html {
 	 * @param string
 	 * @return
 	 */
-	public static String convertNoBreakSpace160(String string) {
-		return string.replaceAll("\\" + noBreakSpace160, " ");
+	public static String replaceNoBreakSpace(String string) {
+		return string.replaceAll("\\" + EasyHtml.Unicode.NOBREAKSPACE, " ");
 	}
 
 	/**
@@ -181,5 +174,29 @@ public class Html {
 	 */
 	public static boolean isValidUrl(String url) {
 		return UrlValidator.getInstance().isValid(url);
+	}
+
+	/**
+	 * HTML Tags
+	 */
+	public static class Tags {
+		public static final String spanOpen = "<span>";
+		public static final String spanClose = "</span>";
+		public static final String divOpen = "<div>";
+		public static final String divClose = "</div>";
+	}
+
+	/**
+	 * HTML Attributes
+	 */
+	public static class Attributes {
+		public static final String src = "src=\"";
+	}
+
+	/**
+	 * HTML Unicode Characters
+	 */
+	public static class Unicode {
+		public static final String NOBREAKSPACE = "u00A0";
 	}
 }
