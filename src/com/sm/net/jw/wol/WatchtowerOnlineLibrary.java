@@ -75,6 +75,8 @@ public class WatchtowerOnlineLibrary {
 		public static final String BIBLEREADING = "wol.pattern.biblereading";
 		public static final String POINT = "wol.pattern.point";
 		public static final String POINTTEXT = "wol.pattern.pointtext";
+		public static final String MINISTRY = "wol.pattern.ministry";
+		public static final String CHRISTIANS = "wol.pattern.christians";
 	}
 
 	/**

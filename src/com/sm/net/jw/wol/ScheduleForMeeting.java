@@ -19,12 +19,14 @@ public class ScheduleForMeeting {
 	private Part treasuresDigging;
 	private ObservableList<Point> diggingPointsList;
 	private BibleReadingPart treasuresBibleReading;
+	private ObservableList<MinistryPart> ministryPartsList;
 
 	public ScheduleForMeeting(ArrayList<String> relevantRows, Language language) {
 		super();
 
 		defineFirstInfo(relevantRows, language);
 		defineTreasures(relevantRows, language);
+		defineMinistry(relevantRows, language);
 	}
 
 	/**
@@ -53,6 +55,12 @@ public class ScheduleForMeeting {
 		}
 	}
 
+	/**
+	 * Define Talk, Digging and Bible Reading
+	 * 
+	 * @param relevantRows
+	 * @param language
+	 */
 	private void defineTreasures(ArrayList<String> relevantRows, Language language) {
 
 		// Treasures from God's word index + 1
@@ -87,6 +95,24 @@ public class ScheduleForMeeting {
 		if (isValid(relevantRows, bibleReadingIndex)) {
 			// Bible Reading
 			this.treasuresBibleReading = new BibleReadingPart(relevantRows.get(bibleReadingIndex));
+		}
+	}
+
+	private void defineMinistry(ArrayList<String> relevantRows, Language language) {
+
+		// Apply yourself to the field ministry index + 1
+		int ministryIndex = find(relevantRows, language.getString(WatchtowerOnlineLibrary.LanguageKey.MINISTRY));
+		// Living as christians index
+		int christiansIndex = find(relevantRows, language.getString(WatchtowerOnlineLibrary.LanguageKey.CHRISTIANS));
+
+		if (isValid(relevantRows, ministryIndex) && isValid(relevantRows, christiansIndex)) {
+			// Ministry-Parts
+			this.ministryPartsList = FXCollections.observableArrayList();
+			for (int i = (ministryIndex + 1); i < christiansIndex; i++) {
+				MinistryPart e = new MinistryPart(relevantRows.get(i));
+				System.out.println(e.print());
+				ministryPartsList.add(e);
+			}
 		}
 	}
 
@@ -133,7 +159,7 @@ public class ScheduleForMeeting {
 	}
 
 	/**
-	 * Remove last brackets
+	 * Remove last brackets if presents
 	 * 
 	 * @param text
 	 * @return
@@ -143,7 +169,7 @@ public class ScheduleForMeeting {
 			int index = text.lastIndexOf("(");
 			return (index > -1) ? text.substring(0, index).trim() : text;
 		}
-		return "";
+		return text;
 	}
 
 	/**
@@ -309,6 +335,14 @@ public class ScheduleForMeeting {
 
 	public void setTreasuresBibleReading(BibleReadingPart treasuresBibleReading) {
 		this.treasuresBibleReading = treasuresBibleReading;
+	}
+
+	public ObservableList<MinistryPart> getMinistryPartsList() {
+		return ministryPartsList;
+	}
+
+	public void setMinistryPartsList(ObservableList<MinistryPart> ministryPartsList) {
+		this.ministryPartsList = ministryPartsList;
 	}
 
 	/**
@@ -631,6 +665,110 @@ public class ScheduleForMeeting {
 
 		public void setBible(String bible) {
 			this.bible = bible;
+		}
+
+		public String getMaterial() {
+			return material;
+		}
+
+		public void setMaterial(String material) {
+			this.material = material;
+		}
+
+	}
+
+	/**
+	 * Represents the Bible Reading Part
+	 */
+	public class MinistryPart {
+
+		private String text;
+		private String textPart;
+		private Integer min;
+		private String body;
+		private String material;
+
+		public MinistryPart(String text) {
+			super();
+			this.text = text;
+			this.textPart = defineTextPart();
+			this.min = ScheduleForMeeting.firstNumberInText(this.text);
+			this.body = defineBody();
+			this.material = defineMaterial();
+		}
+
+		private String defineTextPart() {
+			int i = this.text.indexOf("(");
+			return (i > -1) ? (this.text.substring(0, i - 1).trim()) : "";
+		}
+
+		private String defineBody() {
+			int i = this.text.indexOf(")");
+			return (i > -1)
+					? ScheduleForMeeting.removeLastBrackets(this.text.substring(i + 1, this.text.length()).trim()) : "";
+		}
+
+		private String defineMaterial() {
+			return ScheduleForMeeting.removeOpenAndCloseBrackets(ScheduleForMeeting.getLastBrachets(this.text));
+		}
+
+		public String print() {
+
+			String text = "";
+
+			text += "\n";
+			text += "Text: ";
+			text += this.text;
+			text += "\n";
+			text += "TextPart: ";
+			if (this.textPart != null)
+				text += this.textPart;
+			text += "\n";
+			text += "Min: ";
+			if (this.min != null)
+				text += this.min.toString();
+			text += "\n";
+			text += "Body: ";
+			if (this.body != null)
+				text += this.body;
+			text += "\n";
+			text += "Material: ";
+			if (this.material != null)
+				text += this.material;
+
+			return text;
+		}
+
+		public String getText() {
+			return text;
+		}
+
+		public void setText(String text) {
+			this.text = text;
+		}
+
+		public String getTextPart() {
+			return textPart;
+		}
+
+		public void setTextPart(String textPart) {
+			this.textPart = textPart;
+		}
+
+		public Integer getMin() {
+			return min;
+		}
+
+		public void setMin(Integer min) {
+			this.min = min;
+		}
+
+		public String getBody() {
+			return body;
+		}
+
+		public void setBody(String body) {
+			this.body = body;
 		}
 
 		public String getMaterial() {
