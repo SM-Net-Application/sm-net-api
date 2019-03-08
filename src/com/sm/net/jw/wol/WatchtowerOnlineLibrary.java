@@ -18,9 +18,9 @@ public class WatchtowerOnlineLibrary {
 
 		final String linkPattern = "https://wol.jw.org/%s/wol/dt/r%s/lp-%s/%d/%d/%d";
 
-		String languageCode = language.getString(LanguageKey.CODE);
-		String languageNo = language.getString(LanguageKey.NO);
-		String languageShortcode = language.getString(LanguageKey.SHORTCODE);
+		String languageCode = language.getString(LanguageKey.LANGUAGECODE);
+		String languageNo = language.getString(LanguageKey.LANGUAGENO);
+		String languageShortcode = language.getString(LanguageKey.LANGUAGESHORTCODE);
 
 		int dateYear = date.getYear();
 		int dateMonth = date.getMonthValue();
@@ -66,17 +66,34 @@ public class WatchtowerOnlineLibrary {
 	 * Language Keys
 	 */
 	public static class LanguageKey {
-		public static final String CODE = "wol.language.code";
-		public static final String SHORTCODE = "wol.language.shortcode";
-		public static final String NO = "wol.language.no";
-		public static final String SONG1 = "wol.pattern.song1";
-		public static final String TREASURES = "wol.pattern.treasures";
-		public static final String DIGGING = "wol.pattern.digging";
-		public static final String BIBLEREADING = "wol.pattern.biblereading";
-		public static final String POINT = "wol.pattern.point";
-		public static final String POINTTEXT = "wol.pattern.pointtext";
-		public static final String MINISTRY = "wol.pattern.ministry";
-		public static final String CHRISTIANS = "wol.pattern.christians";
+
+		public static final String LANGUAGECODE = "wol.language.code";
+		public static final String LANGUAGESHORTCODE = "wol.language.shortcode";
+		public static final String LANGUAGENO = "wol.language.no";
+
+		public static final String PATTERNSONG1 = "wol.pattern.song1";
+		public static final String PATTERNTREASURES = "wol.pattern.treasures";
+		public static final String PATTERNDIGGING = "wol.pattern.digging";
+		public static final String PATTERNBIBLEREADING = "wol.pattern.biblereading";
+		public static final String PATTERNPOINT = "wol.pattern.point";
+		public static final String PATTERNPOINTTEXT = "wol.pattern.pointtext";
+		public static final String PATTERNMINISTRY = "wol.pattern.ministry";
+		public static final String PATTERNCHRISTIANS = "wol.pattern.christians";
+		public static final String PATTERNSONG2 = "wol.pattern.song2";
+		public static final String PATTERNCONGRBIBLESTUDY = "wol.pattern.congrbiblestudy";
+
+		public static final String MINISTRYTYPEDISCUSSION = "wol.ministry.discussion";
+		public static final String MINISTRYTYPEINITIALCALL = "wol.ministry.initialcall";
+		public static final String MINISTRYTYPERETURNVISIT = "wol.ministry.returnvisit";
+		public static final String MINISTRYTYPEBIBLESTUDY = "wol.ministry.biblestudy";
+		public static final String MINISTRYTYPETALK = "wol.ministry.talk";
+
+		public static final String PATTERNINITIALCALL1 = "wol.ministry.initialcall1";
+		public static final String PATTERNRETURNVISIT1 = "wol.ministry.returnvisit1";
+		public static final String PATTERNRETURNVISIT2 = "wol.ministry.returnvisit2";
+		public static final String PATTERNRETURNVISIT3 = "wol.ministry.returnvisit3";
+		public static final String PATTERNBIBLESTUDY1 = "wol.ministry.biblestudy1";
+		public static final String PATTERNTALK1 = "wol.ministry.talk1";
 	}
 
 	/**

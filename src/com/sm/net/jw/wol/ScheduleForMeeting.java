@@ -20,6 +20,8 @@ public class ScheduleForMeeting {
 	private ObservableList<Point> diggingPointsList;
 	private BibleReadingPart treasuresBibleReading;
 	private ObservableList<MinistryPart> ministryPartsList;
+	private Song song2;
+	private ObservableList<ChristiansPart> christiansPartsList;
 
 	public ScheduleForMeeting(ArrayList<String> relevantRows, Language language) {
 		super();
@@ -27,6 +29,7 @@ public class ScheduleForMeeting {
 		defineFirstInfo(relevantRows, language);
 		defineTreasures(relevantRows, language);
 		defineMinistry(relevantRows, language);
+		defineChristians(relevantRows, language);
 	}
 
 	/**
@@ -38,7 +41,7 @@ public class ScheduleForMeeting {
 	private void defineFirstInfo(ArrayList<String> relevantRows, Language language) {
 
 		// Start point: Song 1 index
-		int index = find(relevantRows, language.getString(WatchtowerOnlineLibrary.LanguageKey.SONG1));
+		int index = find(relevantRows, language.getString(WatchtowerOnlineLibrary.LanguageKey.PATTERNSONG1));
 		if (isValid(relevantRows, index)) {
 			this.song1 = new Song(relevantRows.get(index));
 
@@ -64,12 +67,12 @@ public class ScheduleForMeeting {
 	private void defineTreasures(ArrayList<String> relevantRows, Language language) {
 
 		// Treasures from God's word index + 1
-		int talkIndex = find(relevantRows, language.getString(WatchtowerOnlineLibrary.LanguageKey.TREASURES));
+		int talkIndex = find(relevantRows, language.getString(WatchtowerOnlineLibrary.LanguageKey.PATTERNTREASURES));
 		// Digging for Spiritual Gems index
-		int diggingIndex = find(relevantRows, language.getString(WatchtowerOnlineLibrary.LanguageKey.DIGGING));
+		int diggingIndex = find(relevantRows, language.getString(WatchtowerOnlineLibrary.LanguageKey.PATTERNDIGGING));
 		// Bible Reading
 		int bibleReadingIndex = find(relevantRows,
-				language.getString(WatchtowerOnlineLibrary.LanguageKey.BIBLEREADING));
+				language.getString(WatchtowerOnlineLibrary.LanguageKey.PATTERNBIBLEREADING));
 
 		if (isValid(relevantRows, talkIndex) && isValid(relevantRows, diggingIndex)) {
 			// Talk
@@ -101,17 +104,36 @@ public class ScheduleForMeeting {
 	private void defineMinistry(ArrayList<String> relevantRows, Language language) {
 
 		// Apply yourself to the field ministry index + 1
-		int ministryIndex = find(relevantRows, language.getString(WatchtowerOnlineLibrary.LanguageKey.MINISTRY));
+		int ministryIndex = find(relevantRows, language.getString(WatchtowerOnlineLibrary.LanguageKey.PATTERNMINISTRY));
 		// Living as christians index
-		int christiansIndex = find(relevantRows, language.getString(WatchtowerOnlineLibrary.LanguageKey.CHRISTIANS));
+		int christiansIndex = find(relevantRows,
+				language.getString(WatchtowerOnlineLibrary.LanguageKey.PATTERNCHRISTIANS));
 
 		if (isValid(relevantRows, ministryIndex) && isValid(relevantRows, christiansIndex)) {
 			// Ministry-Parts
 			this.ministryPartsList = FXCollections.observableArrayList();
-			for (int i = (ministryIndex + 1); i < christiansIndex; i++) {
-				MinistryPart e = new MinistryPart(relevantRows.get(i));
+			for (int i = (ministryIndex + 1); i < christiansIndex; i++)
+				ministryPartsList.add(new MinistryPart(relevantRows.get(i), language));
+		}
+	}
+
+	private void defineChristians(ArrayList<String> relevantRows, Language language) {
+		// Song 2 index
+		int song2Index = find(relevantRows, language.getString(WatchtowerOnlineLibrary.LanguageKey.PATTERNSONG2));
+		// Congregation Bible Study index
+		int congrBibleStudyIndex = find(relevantRows,
+				language.getString(WatchtowerOnlineLibrary.LanguageKey.PATTERNCONGRBIBLESTUDY));
+
+		if (isValid(relevantRows, song2Index) && isValid(relevantRows, congrBibleStudyIndex)) {
+			// Song 2
+			this.song2 = new Song(relevantRows.get(song2Index));
+
+			// ChristiansPart-Parts
+			this.christiansPartsList = FXCollections.observableArrayList();
+			for (int i = (song2Index + 1); i < congrBibleStudyIndex; i++) {
+				ChristiansPart e = new ChristiansPart(relevantRows.get(i), language);
+				this.christiansPartsList.add(e);
 				System.out.println(e.print());
-				ministryPartsList.add(e);
 			}
 		}
 	}
@@ -345,6 +367,22 @@ public class ScheduleForMeeting {
 		this.ministryPartsList = ministryPartsList;
 	}
 
+	public Song getSong2() {
+		return song2;
+	}
+
+	public void setSong2(Song song2) {
+		this.song2 = song2;
+	}
+
+	public ObservableList<ChristiansPart> getChristiansPartsList() {
+		return christiansPartsList;
+	}
+
+	public void setChristiansPartsList(ObservableList<ChristiansPart> christiansPartsList) {
+		this.christiansPartsList = christiansPartsList;
+	}
+
 	/**
 	 * Represents a song
 	 */
@@ -501,7 +539,7 @@ public class ScheduleForMeeting {
 
 		private boolean isPoint(String text, Language language) {
 
-			if (text.matches(language.getString(WatchtowerOnlineLibrary.LanguageKey.POINT)))
+			if (text.matches(language.getString(WatchtowerOnlineLibrary.LanguageKey.PATTERNPOINT)))
 				return true;
 
 			return false;
@@ -509,7 +547,7 @@ public class ScheduleForMeeting {
 
 		private boolean isPointText(String text, Language language) {
 
-			String pattern = language.getString(WatchtowerOnlineLibrary.LanguageKey.POINTTEXT);
+			String pattern = language.getString(WatchtowerOnlineLibrary.LanguageKey.PATTERNPOINTTEXT);
 			if (text.matches(pattern))
 				return true;
 
@@ -678,7 +716,7 @@ public class ScheduleForMeeting {
 	}
 
 	/**
-	 * Represents the Bible Reading Part
+	 * Represents the Ministry Part
 	 */
 	public class MinistryPart {
 
@@ -687,14 +725,18 @@ public class ScheduleForMeeting {
 		private Integer min;
 		private String body;
 		private String material;
+		private MinistryType ministryType;
+		private MinistryTypeTranslated ministryTypeTranslated;
 
-		public MinistryPart(String text) {
+		public MinistryPart(String text, Language language) {
 			super();
 			this.text = text;
 			this.textPart = defineTextPart();
 			this.min = ScheduleForMeeting.firstNumberInText(this.text);
 			this.body = defineBody();
 			this.material = defineMaterial();
+			this.ministryType = defineMinistryType(language);
+			this.ministryTypeTranslated = defineMinistryTypeTranslated(language);
 		}
 
 		private String defineTextPart() {
@@ -710,6 +752,43 @@ public class ScheduleForMeeting {
 
 		private String defineMaterial() {
 			return ScheduleForMeeting.removeOpenAndCloseBrackets(ScheduleForMeeting.getLastBrachets(this.text));
+		}
+
+		private MinistryType defineMinistryType(Language language) {
+
+			if (!this.textPart.isEmpty()) {
+
+				String text = this.textPart.toLowerCase().trim();
+
+				if (text.matches(language.getString(WatchtowerOnlineLibrary.LanguageKey.PATTERNINITIALCALL1)))
+					return MinistryType.INITIAL_CALL;
+
+				if (text.matches(language.getString(WatchtowerOnlineLibrary.LanguageKey.PATTERNRETURNVISIT1)))
+					return MinistryType.RETURN_VISIT;
+
+				if (text.matches(language.getString(WatchtowerOnlineLibrary.LanguageKey.PATTERNRETURNVISIT2)))
+					return MinistryType.RETURN_VISIT;
+
+				if (text.matches(language.getString(WatchtowerOnlineLibrary.LanguageKey.PATTERNRETURNVISIT3)))
+					return MinistryType.RETURN_VISIT;
+
+				if (text.matches(language.getString(WatchtowerOnlineLibrary.LanguageKey.PATTERNBIBLESTUDY1)))
+					return MinistryType.BIBLE_STUDY;
+
+				if (text.matches(language.getString(WatchtowerOnlineLibrary.LanguageKey.PATTERNTALK1)))
+					return MinistryType.TALK;
+
+			}
+
+			return MinistryType.DISCUSSION;
+		}
+
+		private MinistryTypeTranslated defineMinistryTypeTranslated(Language language) {
+
+			if (this.ministryType != null)
+				return MinistryType.getMinistryTypeTranslated(this.ministryType, language);
+
+			return null;
 		}
 
 		public String print() {
@@ -735,6 +814,14 @@ public class ScheduleForMeeting {
 			text += "Material: ";
 			if (this.material != null)
 				text += this.material;
+			text += "\n";
+			text += "MinistryType: ";
+			if (this.ministryType != null)
+				text += this.ministryType.ordinal() + " - " + this.ministryType.getName();
+			text += "\n";
+			text += "MinistryTypeTranslated: ";
+			if (this.ministryTypeTranslated != null)
+				text += this.ministryTypeTranslated.getName();
 
 			return text;
 		}
@@ -779,5 +866,105 @@ public class ScheduleForMeeting {
 			this.material = material;
 		}
 
+		public MinistryType getMinistryType() {
+			return ministryType;
+		}
+
+		public void setMinistryType(MinistryType ministryType) {
+			this.ministryType = ministryType;
+		}
+
+		public MinistryTypeTranslated getMinistryTypeTranslated() {
+			return ministryTypeTranslated;
+		}
+
+		public void setMinistryTypeTranslated(MinistryTypeTranslated ministryTypeTranslated) {
+			this.ministryTypeTranslated = ministryTypeTranslated;
+		}
+
+	}
+
+	/**
+	 * Represents the Christians Part
+	 */
+	public class ChristiansPart {
+
+		private String text;
+		private String textPart;
+		private Integer min;
+		private String body;
+
+		public ChristiansPart(String text, Language language) {
+			super();
+			this.text = text;
+			this.textPart = defineTextPart();
+			this.min = ScheduleForMeeting.firstNumberInText(this.text.substring(this.text.indexOf("("), text.length()));
+			this.body = defineBody();
+		}
+
+		private String defineTextPart() {
+			int i = this.text.indexOf("(");
+			return (i > -1) ? (this.text.substring(0, i - 1).trim()) : "";
+		}
+
+		private String defineBody() {
+			int i = this.text.indexOf(")");
+			return (i > -1) ? this.text.substring(i + 1, this.text.length()).trim() : "";
+		}
+
+		public String print() {
+
+			String text = "";
+
+			text += "\n";
+			text += "Text: ";
+			text += this.text;
+			text += "\n";
+			text += "TextPart: ";
+			if (this.textPart != null)
+				text += this.textPart;
+			text += "\n";
+			text += "Min: ";
+			if (this.min != null)
+				text += this.min.toString();
+			text += "\n";
+			text += "Body: ";
+			if (this.body != null)
+				text += this.body;
+
+			return text;
+		}
+
+		public String getText() {
+			return text;
+		}
+
+		public void setText(String text) {
+			this.text = text;
+		}
+
+		public String getTextPart() {
+			return textPart;
+		}
+
+		public void setTextPart(String textPart) {
+			this.textPart = textPart;
+		}
+
+		public Integer getMin() {
+			return min;
+		}
+
+		public void setMin(Integer min) {
+			this.min = min;
+		}
+
+		public String getBody() {
+			return body;
+		}
+
+		public void setBody(String body) {
+			this.body = body;
+		}
 	}
 }
