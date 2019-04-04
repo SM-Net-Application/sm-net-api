@@ -40,9 +40,9 @@ public class JSON {
 			}
 
 		} catch (ClientProtocolException e) {
-			System.out.println(e.getMessage());
+			// System.out.println(e.getMessage());
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			// System.out.println(e.getMessage());
 		} finally {
 			try {
 				if (httpClient != null)
