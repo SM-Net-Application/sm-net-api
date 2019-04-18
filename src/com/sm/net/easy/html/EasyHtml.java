@@ -1,4 +1,4 @@
-package com.sm.net.util;
+package com.sm.net.easy.html;
 
 import java.io.IOException;
 
@@ -9,6 +9,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 /**
@@ -24,6 +25,7 @@ public class EasyHtml {
 	 * Metadata
 	 */
 	public static final String backslash = "\"";
+	public static final String USER_AGENT = "Firefox/63.0.1";
 
 	/**
 	 * 
@@ -92,6 +94,8 @@ public class EasyHtml {
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpGet httpGet = new HttpGet(url);
+		httpGet.addHeader(HTTP.USER_AGENT, USER_AGENT);
+
 		CloseableHttpResponse response = null;
 
 		try {
@@ -126,6 +130,12 @@ public class EasyHtml {
 	 */
 	public static String removeTag(String code) {
 		return removeTag(code, false);
+	}
+
+	public static String removeLineBreak(String code) {
+		code = code.replace("\r", "");
+		code = code.replace("\n", "");
+		return code;
 	}
 
 	/**
@@ -164,6 +174,10 @@ public class EasyHtml {
 	 */
 	public static String replaceNoBreakSpace(String string) {
 		return string.replaceAll("\\" + EasyHtml.Unicode.NOBREAKSPACE, " ");
+	}
+
+	public static String removeSpaces(String string) {
+		return string.replace(" ", "");
 	}
 
 	/**

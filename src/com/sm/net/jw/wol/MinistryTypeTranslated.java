@@ -21,6 +21,15 @@ public class MinistryTypeTranslated {
 		this.ordinal = ministryType.ordinalProperty();
 	}
 
+	public MinistryTypeTranslated(int spInf3, Language language) {
+
+		MinistryType ministryType = MinistryType.getFromOrdinal(spInf3);
+
+		this.type = new SimpleObjectProperty<MinistryType>(ministryType);
+		this.name = new SimpleStringProperty(language.getString(ministryType.getName()));
+		this.ordinal = ministryType.ordinalProperty();
+	}
+
 	public final StringProperty nameProperty() {
 		return this.name;
 	}

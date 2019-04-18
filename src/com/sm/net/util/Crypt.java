@@ -91,7 +91,8 @@ public class Crypt {
 		} catch (NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException
 				| InvalidKeyException e) {
 
-			System.out.println(e.getMessage());
+			// System.out.println(e.getMessage());
+			e.printStackTrace();
 
 		}
 

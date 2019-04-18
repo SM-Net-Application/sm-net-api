@@ -40,6 +40,15 @@ public enum MinistryType {
 		return ministryTypeTranslatedList;
 	}
 
+	public static MinistryType getFromOrdinal(int ordinal) {
+
+		for (MinistryType mt : values())
+			if (mt.getOrdinal() == ordinal)
+				return mt;
+
+		return MinistryType.DISCUSSION;
+	}
+
 	public final StringProperty nameProperty() {
 		return this.name;
 	}

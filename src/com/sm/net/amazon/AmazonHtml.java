@@ -16,7 +16,7 @@ public class AmazonHtml {
 	 */
 	public static final String productTitleStart = "<span id=\"productTitle\" class=\"a-size-large\">";
 	public static final String salePriceStart = "<span id=\"priceblock_saleprice\" class=\"a-size-medium a-color-price\">EUR";
-	public static final String ourPriceStart = "<span id=\"priceblock_ourprice\" class=\"a-size-medium a-color-price\">EUR";
+	public static final String ourPriceStart = "<span id=\"priceblock_ourprice\" class=\"a-size-medium a-color-price priceBlockBuyingPriceString\">EUR";
 	public static final String imageTagWrapperStart = "<div id=\"imgTagWrapperId\" class=\"imgTagWrapper\">";
 
 	/**
