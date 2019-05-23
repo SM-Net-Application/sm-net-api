@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 
 public class ScheduleForMeeting {
 
+	private boolean present;
 	private String bibleChapters;
 	private Song song1;
 	private Part openingComments;
@@ -29,6 +30,7 @@ public class ScheduleForMeeting {
 	public ScheduleForMeeting(ArrayList<String> relevantRows, Language language) {
 		super();
 
+		this.present = true;
 		defineFirstInfo(relevantRows, language);
 		defineTreasures(relevantRows, language);
 		defineMinistry(relevantRows, language);
@@ -60,7 +62,8 @@ public class ScheduleForMeeting {
 				if (isValid(relevantRows, index))
 					this.openingComments = new Part(relevantRows.get(index));
 			}
-		}
+		} else
+			this.present = false;
 	}
 
 	/**
@@ -1121,5 +1124,13 @@ public class ScheduleForMeeting {
 		public void setBody(String body) {
 			this.body = body;
 		}
+	}
+
+	public boolean isPresent() {
+		return present;
+	}
+
+	public void setPresent(boolean present) {
+		this.present = present;
 	}
 }
